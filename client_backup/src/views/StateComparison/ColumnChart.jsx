@@ -74,6 +74,22 @@ class ColumnChart extends React.Component {
         console.log(error);
       });
   }
+
+  getMax(data, column) {
+    var max = data[0][column];
+    for (var i = 1; i < data.length; i++) {
+      if (data[i][column] > max) max = data[i][column];
+    }
+    return max;
+  }
+
+  getMin(data, column) {
+    var min = data[0][column];
+    for (var i = 1; i < data.length; i++) {
+      if (data[i][column] < min) min = data[i][column];
+    }
+    return min;
+  }
   toggle() {
     this.setState(prevState => ({
       dropdownOpen: !prevState.dropdownOpen

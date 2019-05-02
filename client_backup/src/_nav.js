@@ -158,7 +158,7 @@ export default {
     },
     {
       name: "State Detail",
-      url: "/state-detail",
+      url: "/stateDetail",
       icon: "icon-pie-chart"
     },
     {
@@ -246,7 +246,7 @@ export default {
       children: [
         {
           name: "State Detail",
-          url: "/state-detail",
+          url: "/stateDetail",
           icon: "icon-star"
         },
         {

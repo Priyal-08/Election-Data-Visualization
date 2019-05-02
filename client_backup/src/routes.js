@@ -104,7 +104,7 @@ const routes = [
   { path: "/notifications/modals", name: "Modals", component: Modals },
   { path: "/widgets", name: "Widgets", component: Widgets },
   { path: "/charts", name: "Charts", component: Charts },
-  { path: "/stateetail", name: "StateDetail", component: StateDetail },
+  { path: "/stateDetail", name: "StateDetail", component: StateDetail },
   {
     path: "/stateComparison",
     name: "StateComparison",
