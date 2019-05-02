@@ -20,7 +20,13 @@ class ColumnChart extends React.Component {
       selectedOptions: [],
       dropdownOpen: false,
       selectedYear: 2016,
-      years: []
+      years: [],
+      yearwiseData: [
+        {
+          year: 2016,
+          data: []
+        }
+      ]
     };
   }
   componentDidMount() {
@@ -41,10 +47,16 @@ class ColumnChart extends React.Component {
         });
         //console.log(response.data);
         response.data.sort(function(a, b) {
-          return b.wait - a.wait;
+          return b.year - a.year;
         });
         var data = [];
         var completeData = [];
+        var yearwiseData = [];
+        var y2008 = [];
+        var y2010 = [];
+        var y2012 = [];
+        var y2014 = [];
+        var y2016 = [];
         data.push(["State", "WaitTime", { role: "style" }]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
@@ -58,6 +70,56 @@ class ColumnChart extends React.Component {
             data.push(row);
           }
 
+          switch (parseInt(rowData.year)) {
+            case 2008:
+              y2008.push({
+                state: rowData.state_fips,
+                year: rowData.year,
+                onlineReg: rowData.online_reg,
+                waitTime: rowData.wait,
+                vepTurnout: rowData.vep_turnout
+              });
+              break;
+            case 2010:
+              y2010.push({
+                state: rowData.state_fips,
+                year: rowData.year,
+                onlineReg: rowData.online_reg,
+                waitTime: rowData.wait,
+                vepTurnout: rowData.vep_turnout
+              });
+              break;
+            case 2012:
+              y2012.push({
+                state: rowData.state_fips,
+                year: rowData.year,
+                onlineReg: rowData.online_reg,
+                waitTime: rowData.wait,
+                vepTurnout: rowData.vep_turnout
+              });
+              break;
+            case 2014:
+              y2014.push({
+                state: rowData.state_fips,
+                year: rowData.year,
+                onlineReg: rowData.online_reg,
+                waitTime: rowData.wait,
+                vepTurnout: rowData.vep_turnout
+              });
+              break;
+            case 2016:
+              y2016.push({
+                state: rowData.state_fips,
+                year: rowData.year,
+                onlineReg: rowData.online_reg,
+                waitTime: rowData.wait,
+                vepTurnout: rowData.vep_turnout
+              });
+              break;
+            default:
+              console.log("unexpected year: ", rowData.year);
+          }
+
           completeData.push({
             state: rowData.state_fips,
             year: rowData.year,
@@ -66,9 +128,33 @@ class ColumnChart extends React.Component {
             vepTurnout: rowData.vep_turnout
           });
         }
+        yearwiseData.push({ year: 2008, data: y2008 });
+        yearwiseData.push({ year: 2010, data: y2010 });
+        yearwiseData.push({ year: 2012, data: y2012 });
+        yearwiseData.push({ year: 2014, data: y2014 });
+        yearwiseData.push({ year: 2016, data: y2016 });
+        for (var idx = 0; idx < yearwiseData.length; idx++) {
+          yearwiseData[idx].data = this.scaleValues(
+            yearwiseData[idx].data,
+            "onlineReg"
+          );
+          yearwiseData[idx].data = this.scaleValues(
+            yearwiseData[idx].data,
+            "waitTime"
+          );
+          yearwiseData[idx].data = this.scaleValues(
+            yearwiseData[idx].data,
+            "vepTurnout"
+          );
+        }
+
+        data.sort(function(a, b) {
+          return b[1] - a[1];
+        });
         this.setState({ completeData: completeData });
         this.setState({ result: data });
         this.setState({ years: distinctYears });
+        this.setState({ yearwiseData: yearwiseData });
       })
       .catch(function(error) {
         console.log(error);
@@ -76,59 +162,66 @@ class ColumnChart extends React.Component {
   }
 
   getMax(data, column) {
-    var max = data[0][column];
-    for (var i = 1; i < data.length; i++) {
-      if (data[i][column] > max) max = data[i][column];
+    var max = Number.MIN_VALUE;
+    for (var i = 0; i < data.length; i++) {
+      if (isNaN(parseInt(data[i][column]))) continue;
+      if (Number(data[i][column]) > max) max = data[i][column];
     }
     return max;
   }
 
   getMin(data, column) {
-    var min = data[0][column];
-    for (var i = 1; i < data.length; i++) {
-      if (data[i][column] < min) min = data[i][column];
+    var min = Number.MAX_VALUE;
+    for (var i = 0; i < data.length; i++) {
+      if (isNaN(parseInt(data[i][column]))) continue;
+      if (Number(data[i][column]) < min) min = data[i][column];
     }
     return min;
   }
+
+  scaleValues(data, column) {
+    var min = this.getMin(data, column);
+    var max = this.getMax(data, column);
+    for (var i = 0; i < data.length; i++) {
+      data[i][column] = (data[i][column] - min) / (max - min);
+    }
+    return data;
+  }
+
   toggle() {
     this.setState(prevState => ({
       dropdownOpen: !prevState.dropdownOpen
     }));
   }
-  changeChartData() {
-    // console.log(
-    //   "year changed to: ",
-    //   this.state.selectedYear,
-    //   " ",
-    //   this.state.selectedOptions.length
-    // );
+
+  updateChartData() {
     if (this.state.selectedOptions.length === 0) return;
-    var stateData = this.state.completeData;
+    var year = parseInt(this.state.selectedYear);
+    var stateData = [];
+    for (var j = 0; j < this.state.yearwiseData.length; j++) {
+      if (this.state.yearwiseData[j].year === year)
+        stateData = this.state.yearwiseData[j].data;
+    }
+
+    // console.log("stateData: ", stateData);
+
     var data = [];
 
-    if (this.state.selectedOptions.includes(1))
-      data.push(["State", "Wait", { role: "style" }]);
-    else if (this.state.selectedOptions.includes(2))
-      data.push(["State", "onlineReg", { role: "style" }]);
-    else if (this.state.selectedOptions.includes(3))
-      data.push(["State", "vepTurnout", { role: "style" }]);
+    data.push(["State", "%", { role: "style" }]);
 
     for (var i = 0; i < stateData.length; ++i) {
-      if (parseInt(stateData[i].year) !== parseInt(this.state.selectedYear))
-        continue;
       var row = [];
       var rowData = stateData[i];
       row.push(rowData.state);
-
-      if (this.state.selectedOptions.includes(1))
-        row.push(parseInt(rowData.waitTime));
-      else if (this.state.selectedOptions.includes(2))
-        row.push(parseInt(rowData.onlineReg * 100));
-      else if (this.state.selectedOptions.includes(3))
-        row.push(parseInt(rowData.vepTurnout * 100));
+      var value = 0;
+      if (this.state.selectedOptions.includes(1)) value += rowData.waitTime;
+      if (this.state.selectedOptions.includes(2)) value += rowData.onlineReg;
+      if (this.state.selectedOptions.includes(3)) value += rowData.vepTurnout;
+      row.push(value);
       row.push("rgba(75,192,192,1)");
       data.push(row);
     }
+
     data.sort(function(a, b) {
       return b[1] - a[1];
     });
@@ -138,29 +231,31 @@ class ColumnChart extends React.Component {
 
   changeDropdown(year) {
     this.setState({ selectedYear: year }, () => {
-      this.changeChartData();
+      this.updateChartData();
     });
   }
   onCheckboxBtnClick(selected) {
-    // const index = this.state.selectedOptions.indexOf(selected);
-    // if (index < 0) {
-    //   this.state.selectedOptions.push(selected);
-    // } else {
-    //   this.state.selectedOptions.splice(index, 1);
-    // }
-    //this.setState({ selectedOptions: [...this.state.selectedOptions] });
-
     const index = this.state.selectedOptions.indexOf(selected);
     if (index < 0) {
-      this.state.selectedOptions.splice(0, this.state.selectedOptions.length);
       this.state.selectedOptions.push(selected);
     } else {
-      this.state.selectedOptions.splice(0, this.state.selectedOptions.length);
-      this.state.selectedOptions.push(selected);
+      this.state.selectedOptions.splice(index, 1);
     }
     this.setState({ selectedOptions: [...this.state.selectedOptions] }, () => {
-      this.changeChartData();
+      this.updateChartData();
     });
+
+    // const index = this.state.selectedOptions.indexOf(selected);
+    // if (index < 0) {
+    //   this.state.selectedOptions.splice(0, this.state.selectedOptions.length);
+    //   this.state.selectedOptions.push(selected);
+    // } else {
+    //   this.state.selectedOptions.splice(0, this.state.selectedOptions.length);
+    //   this.state.selectedOptions.push(selected);
+    // }
+    // this.setState({ selectedOptions: [...this.state.selectedOptions] }, () => {
+    //   this.updateChartData();
+    // });
   }
   render() {
     return (
