@@ -22,7 +22,8 @@ import {
 } from "@coreui/react";
 import logo from "../../assets/img/brand/favicon4.png";
 import sygnet from "../../assets/img/brand/sygnet.svg";
-
+import { getFromStorage, setInStorage } from '../../views/storage';
+import StateDetail from "../../views/StateDetail/StateDetail";
 const propTypes = {
   children: PropTypes.node
 };
@@ -33,16 +34,21 @@ class DefaultHeader extends Component {
   constructor(props) {
     super(props);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
-
     this.state = {
-      radioSelected: 2,
+      radioSelected: 0,
     };
   }
 
   onRadioBtnClick(radioSelected) {
+    var year;
     this.setState({
       radioSelected: radioSelected,
     });
+    if(radioSelected == 1) year = 2016;
+    if(radioSelected == 2) year = 2014;
+    if(radioSelected == 3) year = 2012;
+    if(radioSelected == 4) year = 2010;
+    setInStorage('radioSelected', year);
   }
 
   render() {

@@ -23,6 +23,9 @@ import {
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 import Map from "../Charts/map";
+
+import { getFromStorage, setInStorage } from '../storage';
+
 const Widget03 = lazy(() => import('../Widgets/Widget03'));
 
 const brandPrimary = getStyle('--primary')
@@ -455,32 +458,23 @@ const mainChartOpts = {
 class StateDetail extends Component {
   constructor(props) {
     super(props);
-
     this.toggle = this.toggle.bind(this);
-    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
-
     this.state = {
       dropdownOpen: false,
-      radioSelected: 2,
     };
   }
-
+  
   toggle() {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
     });
   }
 
-  onRadioBtnClick(radioSelected) {
-    this.setState({
-      radioSelected: radioSelected,
-    });
-  }
-
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   render() {
-
+    let radioselected = JSON.parse(localStorage.getItem('radioSelected'));
+    alert('Year selected:::' + radioselected);
     return (
       <div className="animated fadeIn">
         <Row>
@@ -504,7 +498,7 @@ class StateDetail extends Component {
             <Card className="text-white bg-info">
               <CardBody className="pb-0">
                 <div>Percentage of disabled voters</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>34%</h1>
+                <h1 style={{textAlign: "center", fontSize: 80}}>{radioselected}</h1>
               </CardBody>
             </Card>
           </Col>
