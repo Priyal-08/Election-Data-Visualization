@@ -21,6 +21,7 @@ import {
 import { ButtonDropdowns, ButtonGroups, Buttons, BrandButtons } from './Buttons';
 import Charts from './Charts';
 import Dashboard from './Dashboard';
+import StateDetail from './StateDetail';
 import { CoreUIIcons, Flags, FontAwesome, SimpleLineIcons } from './Icons';
 import { Alerts, Badges, Modals } from './Notifications';
 import { Login, Page404, Page500, Register } from './Pages';
@@ -50,6 +51,7 @@ export {
   Tables,
   Charts,
   Dashboard,
+  StateDetail,
   Widgets,
   Jumbotrons,
   Switches,

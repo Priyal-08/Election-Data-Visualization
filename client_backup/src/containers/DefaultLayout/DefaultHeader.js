@@ -6,7 +6,11 @@ import {
   DropdownMenu,
   DropdownToggle,
   Nav,
-  NavItem
+  NavItem,
+  Col,
+  Button,
+  ButtonToolbar,
+  ButtonGroup
 } from "reactstrap";
 import PropTypes from "prop-types";
 
@@ -26,6 +30,21 @@ const propTypes = {
 const defaultProps = {};
 
 class DefaultHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+
+    this.state = {
+      radioSelected: 2,
+    };
+  }
+
+  onRadioBtnClick(radioSelected) {
+    this.setState({
+      radioSelected: radioSelected,
+    });
+  }
+
   render() {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
@@ -56,6 +75,16 @@ class DefaultHeader extends Component {
             </NavLink>
           </NavItem>
         </Nav>
+        <Col sm="7" className="d-none d-sm-inline-block">
+                    <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
+                      <ButtonGroup className="mr-3" aria-label="First group">
+                        <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(1)} active={this.state.radioSelected === 1}>2016</Button>
+                        <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(2)} active={this.state.radioSelected === 2}>2014</Button>
+                        <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(3)} active={this.state.radioSelected === 3}>2012</Button>
+                        <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(4)} active={this.state.radioSelected === 4}>2010</Button>
+                      </ButtonGroup>
+                    </ButtonToolbar>
+                  </Col>
         <Nav className="ml-auto" navbar>
           {/* <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
