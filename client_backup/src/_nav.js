@@ -156,6 +156,11 @@ export default {
       url: "/charts",
       icon: "icon-pie-chart"
     },
+    {
+      name: "State Detail",
+      url: "/state-detail",
+      icon: "icon-pie-chart"
+    },
     // {
     //   name: "Icons",
     //   url: "/icons",
@@ -234,6 +239,11 @@ export default {
       url: "/pages",
       icon: "icon-star",
       children: [
+        {
+          name: "State Detail",
+          url: "/state-detail",
+          icon: "icon-star"
+        },
         {
           name: "Login",
           url: "/login",
