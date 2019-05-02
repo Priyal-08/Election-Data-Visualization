@@ -161,6 +161,11 @@ export default {
       url: "/state-detail",
       icon: "icon-pie-chart"
     },
+    {
+      name: "State Comparison",
+      url: "/stateComparison",
+      icon: "icon-pie-chart"
+    },
     // {
     //   name: "Icons",
     //   url: "/icons",
@@ -242,6 +247,11 @@ export default {
         {
           name: "State Detail",
           url: "/state-detail",
+          icon: "icon-star"
+        },
+        {
+          name: "State Comparison",
+          url: "/stateComparison",
           icon: "icon-star"
         },
         {

@@ -1,0 +1,6 @@
+{
+  "name": "s",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./StateComparison.js"
+}
