@@ -4,7 +4,8 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  Row
 } from "reactstrap";
 // import ReactDOM from "react-dom";
 import Chart from "react-google-charts";
@@ -16,8 +17,7 @@ class ColumnChart extends React.Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       result: [],
-      completeData: [],
-      selectedOptions: [],
+      selectedOptions: [1], // By default use voting wait time indicator
       dropdownOpen: false,
       selectedYear: 2016,
       years: [],
@@ -26,13 +26,66 @@ class ColumnChart extends React.Component {
           year: 2016,
           data: []
         }
+      ],
+      gradientWith52Colors: [
+        "",
+        "#37C256",
+        "#3DC354",
+        "#44C453",
+        "#4AC552",
+        "#51C751",
+        "#58C850",
+        "#5EC94E",
+        "#65CB4D",
+        "#6BCC4C",
+        "#72CD4B",
+        "#79CF4A",
+        "#7FD048",
+        "#86D147",
+        "#8DD346",
+        "#93D445",
+        "#9AD544",
+        "#A0D642",
+        "#A7D841",
+        "#AED940",
+        "#B4DA3F",
+        "#BBDC3E",
+        "#C1DD3C",
+        "#C8DE3B",
+        "#CFE03A",
+        "#D5E139",
+        "#DCE238",
+        "#E3E437",
+        "#E3DE37",
+        "#E4D837",
+        "#E5D337",
+        "#E6CD38",
+        "#E6C738",
+        "#E7C238",
+        "#E8BC38",
+        "#E9B639",
+        "#E9B139",
+        "#EAAB39",
+        "#EBA53A",
+        "#ECA03A",
+        "#EC9A3A",
+        "#ED953A",
+        "#EE8F3B",
+        "#EF893B",
+        "#EF843B",
+        "#F07E3C",
+        "#F1783C",
+        "#F2733C",
+        "#F26D3C",
+        "#F3673D",
+        "#F4623D",
+        "#F55C3D",
+        "#F6573E"
       ]
     };
   }
   componentDidMount() {
-    // console.log("inside column function");
     axios
-      // .get("http://localhost:4000/elections/year/2016")
       .get("http://localhost:4000/elections/")
       .then(response => {
         var distinctYears = response.data.reduce(function(a, d) {
@@ -49,27 +102,15 @@ class ColumnChart extends React.Component {
         response.data.sort(function(a, b) {
           return b.year - a.year;
         });
-        var data = [];
-        var completeData = [];
+        //var data = [];
         var yearwiseData = [];
         var y2008 = [];
         var y2010 = [];
         var y2012 = [];
         var y2014 = [];
         var y2016 = [];
-        data.push(["State", "WaitTime", { role: "style" }]);
         for (var i = 0; i < response.data.length; ++i) {
-          var row = [];
           var rowData = response.data[i];
-          if (
-            parseInt(response.data[i].year) == parseInt(this.state.selectedYear)
-          ) {
-            row.push(rowData.state_fips);
-            row.push(parseInt(rowData.wait));
-            row.push("rgba(75,192,192,1)");
-            data.push(row);
-          }
-
           switch (parseInt(rowData.year)) {
             case 2008:
               y2008.push({
@@ -119,14 +160,6 @@ class ColumnChart extends React.Component {
             default:
               console.log("unexpected year: ", rowData.year);
           }
-
-          completeData.push({
-            state: rowData.state_fips,
-            year: rowData.year,
-            onlineReg: rowData.online_reg,
-            waitTime: rowData.wait,
-            vepTurnout: rowData.vep_turnout
-          });
         }
         yearwiseData.push({ year: 2008, data: y2008 });
         yearwiseData.push({ year: 2010, data: y2010 });
@@ -148,13 +181,19 @@ class ColumnChart extends React.Component {
           );
         }
 
-        data.sort(function(a, b) {
-          return b[1] - a[1];
-        });
-        this.setState({ completeData: completeData });
-        this.setState({ result: data });
-        this.setState({ years: distinctYears });
-        this.setState({ yearwiseData: yearwiseData });
+        // If voting wait time is less, ranking should be high
+        for (var j = 0; j < yearwiseData.length; j++) {
+          for (var k = 0; k < yearwiseData[j].data.length; k++) {
+            yearwiseData[j].data[k].waitTime =
+              1 - yearwiseData[j].data[k].waitTime;
+          }
+        }
+        this.setState(
+          { yearwiseData: yearwiseData, years: distinctYears },
+          () => {
+            this.updateChartData();
+          }
+        );
       })
       .catch(function(error) {
         console.log(error);
@@ -203,8 +242,6 @@ class ColumnChart extends React.Component {
         stateData = this.state.yearwiseData[j].data;
     }
 
-    // console.log("stateData: ", stateData);
-
     var data = [];
 
     data.push(["State", "%", { role: "style" }]);
@@ -217,7 +254,7 @@ class ColumnChart extends React.Component {
       if (this.state.selectedOptions.includes(1)) value += rowData.waitTime;
       if (this.state.selectedOptions.includes(2)) value += rowData.onlineReg;
       if (this.state.selectedOptions.includes(3)) value += rowData.vepTurnout;
-      row.push(value);
+      row.push(parseInt(value * 100));
       row.push("rgba(75,192,192,1)");
       data.push(row);
     }
@@ -225,6 +262,12 @@ class ColumnChart extends React.Component {
     data.sort(function(a, b) {
       return b[1] - a[1];
     });
+    data[0][3] = { role: "annotation" };
+    for (let a = 1; a < data.length; a++) {
+      data[a][2] = this.state.gradientWith52Colors[a];
+      data[a][3] = data[a][1] + "%";
+      data[a][0] = data[a][0] + " " + a;
+    }
 
     this.setState({ result: data });
   }
@@ -244,23 +287,11 @@ class ColumnChart extends React.Component {
     this.setState({ selectedOptions: [...this.state.selectedOptions] }, () => {
       this.updateChartData();
     });
-
-    // const index = this.state.selectedOptions.indexOf(selected);
-    // if (index < 0) {
-    //   this.state.selectedOptions.splice(0, this.state.selectedOptions.length);
-    //   this.state.selectedOptions.push(selected);
-    // } else {
-    //   this.state.selectedOptions.splice(0, this.state.selectedOptions.length);
-    //   this.state.selectedOptions.push(selected);
-    // }
-    // this.setState({ selectedOptions: [...this.state.selectedOptions] }, () => {
-    //   this.updateChartData();
-    // });
   }
   render() {
     return (
-      <div className="App">
-        <div>
+      <div>
+        <Row>
           <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
             <DropdownToggle caret>{this.state.selectedYear}</DropdownToggle>
             <DropdownMenu>
@@ -277,8 +308,7 @@ class ColumnChart extends React.Component {
               })}
             </DropdownMenu>
           </Dropdown>
-        </div>
-        <div>
+          &nbsp;&nbsp;&nbsp;
           <Button
             color="primary"
             onClick={() => this.onCheckboxBtnClick(1)}
@@ -302,45 +332,39 @@ class ColumnChart extends React.Component {
           >
             Turnout
           </Button>
-        </div>
-        <div>
+        </Row>
+        <Row>
           <Chart
             chartType="BarChart"
-            width="700px"
-            height="1100px"
             data={this.state.result}
-            // width={480}
-            // height={380}
+            width={900}
+            height={800}
             options={{
-              // title: "% of voters turn-out year wise",
+              annotations: {
+                stemColor: "none"
+              },
+              chartArea: { width: "85%", height: "95%" },
               vAxis: {
-                // title: "State",
                 gridlines: {
                   color: "transparent"
                 }
               },
               hAxis: {
-                // title: "% of voters turn-out",
+                textPosition: "none",
                 gridlines: {
                   color: "transparent"
                 }
               },
-              //backgroundColor: "00000000",
               fillOpacity: "0.0",
-              is3D: true,
-              bar: { groupWidth: "75%" },
+              bar: { groupWidth: "70%" },
               legend: "none",
-              fontSize: 10
+              fontSize: 8
             }}
           />
-        </div>
+        </Row>
       </div>
     );
   }
 }
 
 export default ColumnChart;
-
-// const rootElement = document.getElementById("root");
-// ReactDOM.render(<App />, rootElement);
-// export default ColumnChart;

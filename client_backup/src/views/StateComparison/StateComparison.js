@@ -6,15 +6,9 @@ class StateComparison extends Component {
   render() {
     return (
       <div className="animated fadeIn">
-        <CardColumns className="cols-2">
-          <Card>
-            <CardBody>
-              <div className="chart-wrapper">
-                <ColumnChart />
-              </div>
-            </CardBody>
-          </Card>
-        </CardColumns>
+        {/* <div className="chart-wrapper"> */}
+        <ColumnChart />
+        {/* </div> */}
       </div>
     );
   }
