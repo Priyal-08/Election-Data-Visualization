@@ -461,7 +461,15 @@ class StateDetail extends Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       dropdownOpen: false,
+      year: 2016,
     };
+  }
+
+  onRadioBtnClick(year) {
+    var year;
+    this.setState({
+      year: year,
+    });
   }
   
   toggle() {
@@ -473,10 +481,19 @@ class StateDetail extends Component {
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   render() {
-    let radioselected = JSON.parse(localStorage.getItem('radioSelected'));
-    alert('Year selected:::' + radioselected);
+   alert('Year selected:::' + this.state.year);
     return (
       <div className="animated fadeIn">
+      <Col sm="0" className="d-none d-sm-inline-block">
+                    <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
+                      <ButtonGroup className="mr-3" aria-label="First group">
+                        <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(2016)} active={this.state.year === 2016}>2016</Button>
+                        <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(2014)} active={this.state.year === 2014}>2014</Button>
+                        <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(2012)} active={this.state.year === 2012}>2012</Button>
+                        <Button color="outline-secondary" onClick={() => this.onRadioBtnClick(2010)} active={this.state.year === 2010}>2010</Button>
+                      </ButtonGroup>
+                    </ButtonToolbar>
+                  </Col>
         <Row>
           <Col xs="12" sm="12" lg="4">
             <Map/>
@@ -498,7 +515,7 @@ class StateDetail extends Component {
             <Card className="text-white bg-info">
               <CardBody className="pb-0">
                 <div>Percentage of disabled voters</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>{radioselected}</h1>
+                <h1 style={{textAlign: "center", fontSize: 80}}>{this.state.year}</h1>
               </CardBody>
             </Card>
           </Col>
