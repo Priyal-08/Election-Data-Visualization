@@ -81,15 +81,15 @@ module.exports.getStateKpiDataByYear = function(req, res) {
   let year = req.params.year;
   let state = req.params.state;
   var resMap = {};
-  election.find({ year: year, state_abbv: state}, { '_id': 0, 'vep_turnout':1, 'wait':1,'nonvoter_illness_pct':1, 'reg_rej':1 }, function(err, electionresult) {
+  election.find({ year: year, state_abbv: state}, { '_id': 0, 'vep_turnout':1, 'wait':1,'nonvoter_illness_pct':1, 'pct_reg_of_vep_vrs':1 }, function(err, electionresult) {
     if (err) return next(err);
     var VoterTurnOut = electionresult[0]["vep_turnout"] * 100;
     var Disability = electionresult[0]["nonvoter_illness_pct"] * 100;
-    var RejectionRate = electionresult[0]["reg_rej"] * 100;
-    resMap['Turnout'] = VoterTurnOut;
-    resMap['Disability'] = Disability;
-    resMap['Wait'] = parseFloat(electionresult[0]["wait"]);
-    resMap['RejectionRate'] = RejectionRate;
+    var Vrr = electionresult[0]["pct_reg_of_vep_vrs"] * 100;
+    resMap['Turnout'] = VoterTurnOut.toFixed(2);;
+    resMap['Disability'] = Disability.toFixed(2);;
+    resMap['Wait'] = parseFloat(electionresult[0]["wait"]).toFixed(2);;
+    resMap['Vrr'] = Vrr.toFixed(2);;
     console.log(resMap);
     res.json(resMap);
   });
@@ -144,19 +144,19 @@ module.exports.getStateKpiRankDataByYear = function(req, res) {
     resJson["Wait"] = arr.indexOf(state) + 1;
   });
 
-  election.find({ year: year }, { '_id': 0, 'reg_rej':1, "state_abbv":1} , function(err, rejRateRes) {
+  election.find({ year: year }, { '_id': 0, 'pct_reg_of_vep_vrs':1, "state_abbv":1} , function(err, vrrRes) {
     var Rmap = new Map();
     var key3, value3;
-    var count = rejRateRes.length;
+    var count = vrrRes.length;
     for (var i = 0; i < count; i++) {
-      key3 = rejRateRes[i]["state_abbv"];
-      value3 = rejRateRes[i]["reg_rej"] * 100;
+      key3 = vrrRes[i]["state_abbv"];
+      value3 = vrrRes[i]["pct_reg_of_vep_vrs"] * 100;
       Rmap.set(key3,value3);
     }
     var temp = new Map([...Rmap].sort((a, b) => a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1));
     console.log(temp);
     var arr = Array.from(temp.keys());
-    resJson["RejectionRate"] = arr.indexOf(state) ;
+    resJson["Vrr"] = 51 - arr.indexOf(state) ;
   });
   console.log(resJson);
   res.json(resJson);
