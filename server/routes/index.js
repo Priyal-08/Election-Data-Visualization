@@ -31,4 +31,15 @@ router.get("/state/:state/year/:year", modelMain.getStateDataByYear);
  */
 router.get("/voterturnout/:id", modelMain.getVoterTurnOut);
 
+/*
+ * Get KPI data state and year wise
+ */
+router.get("/kpi/state/:state/year/:year", modelMain.getStateKpiDataByYear);
+
+/*
+ * Get KPI's rank for state and year wise
+ */
+router.get("/kpi/rank/state/:state/year/:year", modelMain.getStateKpiRankDataByYear);
+
+
 module.exports = router;
