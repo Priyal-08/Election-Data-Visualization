@@ -32,6 +32,13 @@ router.get("/state/:state/year/:year", modelMain.getStateDataByYear);
 router.get("/voterturnout/:id", modelMain.getVoterTurnOut);
 
 /*
+ * Get disability rate for all states for all years
+ */
+router.get("/disability/:id", modelMain.getDisabilityRate);
+
+
+
+/*
  * Get KPI data state and year wise
  */
 router.get("/kpi/state/:state/year/:year", modelMain.getStateKpiDataByYear);
