@@ -5,7 +5,7 @@ import ColumnChart from "./ColumnChart";
 class StateComparison extends Component {
   render() {
     return (
-      <div className="animated fadeIn">
+      <div className="container-fluid, animated fadeIn">
         {/* <div className="chart-wrapper"> */}
         <ColumnChart />
         {/* </div> */}
