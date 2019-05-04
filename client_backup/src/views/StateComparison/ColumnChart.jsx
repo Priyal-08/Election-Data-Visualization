@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  ButtonToolbar,
-  ButtonGroup,
-  Button,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Row,
-  Col
-} from "reactstrap";
+import { ButtonToolbar, ButtonGroup, Button, Row, Col } from "reactstrap";
 // import ReactDOM from "react-dom";
 import Chart from "react-google-charts";
 import axios from "axios";
@@ -22,13 +12,24 @@ class ColumnChart extends React.Component {
       result: [],
       selectedOptions: [1], // By default use voting wait time indicator
       dropdownOpen: false,
-      selectedYear: 2016,
+      selectedYear: parseInt(2016),
       years: [],
       yearwiseData: [
         {
           year: 2016,
           data: []
         }
+      ],
+      indicators: [
+        { idx: 1, value: "Voting Wait Time" },
+        { idx: 2, value: "Online Registration Available" },
+        { idx: 3, value: "Turnout" },
+        { idx: 4, value: "Voter Registration Rate" },
+        { idx: 5, value: "Registration Rejected" },
+        { idx: 6, value: "Ballot Problems" },
+        { idx: 7, value: "Disability/Illness Problems" },
+        { idx: 8, value: "Residual Vote Rate" },
+        { idx: 9, value: "Data Completeness" }
       ],
       gradientWith52Colors: [
         "#37C256",
@@ -371,7 +372,7 @@ class ColumnChart extends React.Component {
     this.setState({ result: data });
   }
 
-  changeDropdown(year) {
+  updateYear(year) {
     this.setState({ selectedYear: year }, () => {
       this.updateChartData();
     });
@@ -390,167 +391,54 @@ class ColumnChart extends React.Component {
   render() {
     return (
       <div style={{ backgroundColor: "white" }}>
-        <Row
-          style={{ paddingLeft: 40 }}
-          sm="0"
-          className="d-none d-sm-inline-block"
-        >
-          <ButtonToolbar
-            className="float-right"
-            aria-label="Toolbar with button groups"
-          >
-            <ButtonGroup className="mr-3" aria-label="First group">
-              <Button
-                color="outline-secondary"
-                onClick={() => this.onRadioBtnClick(2016)}
-                active={this.state.year === 2016}
-              >
-                2016
-              </Button>
-              <Button
-                color="outline-secondary"
-                onClick={() => this.onRadioBtnClick(2014)}
-                active={this.state.year === 2014}
-              >
-                2014
-              </Button>
-              <Button
-                color="outline-secondary"
-                onClick={() => this.onRadioBtnClick(2012)}
-                active={this.state.year === 2012}
-              >
-                2012
-              </Button>
-              <Button
-                color="outline-secondary"
-                onClick={() => this.onRadioBtnClick(2010)}
-                active={this.state.year === 2010}
-              >
-                2010
-              </Button>
-            </ButtonGroup>
-          </ButtonToolbar>
-        </Row>
         <Row>
           <Col lg="1" />
           <Col lg="3" style={{ paddingLeft: 50, backgroundColor: "#F0F0F0" }}>
-            <Row sm="1">
-              <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                <DropdownToggle caret>{this.state.selectedYear}</DropdownToggle>
-                <DropdownMenu>
+            <Row>
+              <ButtonToolbar
+                className="float-right"
+                aria-label="Toolbar with button groups"
+              >
+                <ButtonGroup className="mr-3" aria-label="First group">
                   {this.state.years.map(year => {
                     return (
-                      <DropdownItem
-                        id={year}
-                        key={year}
-                        onClick={() => this.changeDropdown(year)}
+                      <Button
+                        color="outline-secondary"
+                        onClick={() => this.updateYear(year)}
+                        active={this.state.selectedYear === parseInt(year)}
                       >
                         {year}
-                      </DropdownItem>
+                      </Button>
                     );
                   })}
-                </DropdownMenu>
-              </Dropdown>
+                </ButtonGroup>
+              </ButtonToolbar>
             </Row>
             &nbsp;&nbsp;&nbsp;
             <Row>
-              <Button
-                size="lg"
-                color="primary"
-                onClick={() => this.onCheckboxBtnClick(1)}
-                active={this.state.selectedOptions.includes(1)}
-              >
-                Voting Wait Time
-              </Button>
+              <span>Indicators</span>
             </Row>
             &nbsp;&nbsp;&nbsp;
-            <Row>
-              <Button
-                size="lg"
-                color="primary"
-                onClick={() => this.onCheckboxBtnClick(2)}
-                active={this.state.selectedOptions.includes(2)}
-              >
-                Online Registration Available
-              </Button>
-            </Row>
-            &nbsp;&nbsp;&nbsp;
-            <Row>
-              <Button
-                size="lg"
-                color="primary"
-                onClick={() => this.onCheckboxBtnClick(3)}
-                active={this.state.selectedOptions.includes(3)}
-              >
-                Voter Turnout
-              </Button>
-            </Row>
-            &nbsp;&nbsp;&nbsp;
-            <Row>
-              <Button
-                size="lg"
-                color="primary"
-                onClick={() => this.onCheckboxBtnClick(4)}
-                active={this.state.selectedOptions.includes(4)}
-              >
-                Voter Registration Rate
-              </Button>
-            </Row>
-            &nbsp;&nbsp;&nbsp;
-            <Row>
-              <Button
-                size="lg"
-                color="primary"
-                onClick={() => this.onCheckboxBtnClick(5)}
-                active={this.state.selectedOptions.includes(5)}
-              >
-                Registrations Rejected
-              </Button>
-            </Row>
-            &nbsp;&nbsp;&nbsp;
-            <Row>
-              <Button
-                size="lg"
-                color="primary"
-                onClick={() => this.onCheckboxBtnClick(6)}
-                active={this.state.selectedOptions.includes(6)}
-              >
-                Ballot Problems
-              </Button>
-            </Row>
-            &nbsp;&nbsp;&nbsp;
-            <Row>
-              <Button
-                size="lg"
-                color="primary"
-                onClick={() => this.onCheckboxBtnClick(7)}
-                active={this.state.selectedOptions.includes(7)}
-              >
-                Disability/Illness Problems
-              </Button>
-            </Row>
-            &nbsp;&nbsp;&nbsp;
-            <Row>
-              <Button
-                size="lg"
-                color="primary"
-                onClick={() => this.onCheckboxBtnClick(8)}
-                active={this.state.selectedOptions.includes(8)}
-              >
-                Residual Vote Rate
-              </Button>
-            </Row>
-            &nbsp;&nbsp;&nbsp;
-            <Row>
-              <Button
-                size="lg"
-                color="primary"
-                onClick={() => this.onCheckboxBtnClick(9)}
-                active={this.state.selectedOptions.includes(9)}
-              >
-                Data Completeness
-              </Button>
-            </Row>
+            {this.state.indicators.map(indicator => {
+              return (
+                <div>
+                  <Row>
+                    <Button
+                      className="btn-lg"
+                      // size="lg"
+                      color="primary"
+                      onClick={() => this.onCheckboxBtnClick(indicator.idx)}
+                      active={this.state.selectedOptions.includes(
+                        indicator.idx
+                      )}
+                    >
+                      {indicator.value}
+                    </Button>
+                  </Row>
+                  &nbsp;&nbsp;&nbsp;
+                </div>
+              );
+            })}
           </Col>
           <Col lg="8">
             <Chart
