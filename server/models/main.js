@@ -25,6 +25,8 @@ module.exports.getStateById = function(req, res) {
   });
 };
 
+
+
 module.exports.getYearDataById = function(req, res) {
   let id = req.params.id;
   election.find({ year: id }, function(err, electionresult) {
@@ -47,7 +49,6 @@ module.exports.getStateDataByYear = function(req, res) {
 };
 
 const sleep = milliseconds => {
-  console.log("Sleep called");
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 };
 
@@ -71,9 +72,9 @@ module.exports.getVoterTurnOut = function(req, res) {
     })
   );
   sleep(1000).then(() => {
-    console.log(myMap);
     res.json(myMap.sort());
   });
+  console.log(myMap);
 };
 
 
@@ -89,7 +90,7 @@ module.exports.getStateKpiDataByYear = function(req, res) {
     resMap['Turnout'] = VoterTurnOut.toFixed(2);;
     resMap['Disability'] = Disability.toFixed(2);;
     resMap['Wait'] = parseFloat(electionresult[0]["wait"]).toFixed(2);;
-    resMap['Vrr'] = Vrr.toFixed(2);;
+    resMap['Vrr'] = Vrr.toFixed(2);
     console.log(resMap);
     res.json(resMap);
   });
