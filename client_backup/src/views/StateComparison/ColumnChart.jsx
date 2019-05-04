@@ -405,7 +405,9 @@ class ColumnChart extends React.Component {
                       <Button
                         color="outline-secondary"
                         onClick={() => this.updateYear(year)}
-                        active={this.state.selectedYear === parseInt(year)}
+                        active={
+                          parseInt(this.state.selectedYear) === parseInt(year)
+                        }
                       >
                         {year}
                       </Button>
