@@ -153,11 +153,9 @@ class ColumnChart extends React.Component {
         distinctYears.sort(function(a, b) {
           return b - a;
         });
-        //console.log(response.data);
         response.data.sort(function(a, b) {
           return b.year - a.year;
         });
-        //var data = [];
         var yearwiseData = [];
         var y2008 = [];
         var y2010 = [];
@@ -331,16 +329,10 @@ class ColumnChart extends React.Component {
       if (this.state.yearwiseData[j].year === year)
         stateData = this.state.yearwiseData[j].data;
     }
-
-    var data = [];
-
-    data.push(["State", "%", { role: "style" }]);
-
-    for (var i = 0; i < stateData.length; ++i) {
-      var row = [];
+    let unscaledData = [];
+    for (let i = 0; i < stateData.length; ++i) {
       var rowData = stateData[i];
-      row.push(rowData.state);
-      var value = 0;
+      let value = 0;
       if (this.state.selectedOptions.includes(1)) value += rowData.waitTime;
       if (this.state.selectedOptions.includes(2)) value += rowData.onlineReg;
       if (this.state.selectedOptions.includes(3)) value += rowData.vepTurnout;
@@ -354,22 +346,28 @@ class ColumnChart extends React.Component {
         value += rowData.residualVoteRate;
       if (this.state.selectedOptions.includes(9))
         value += rowData.dataCompleteness;
-      row.push(parseInt(value * 100));
-      row.push("rgba(75,192,192,1)");
-      data.push(row);
+      unscaledData.push({ state: rowData.state, value: value });
     }
 
+    unscaledData = this.scaleValues(unscaledData, "value");
+
+    var data = [];
+    data.push(["State", "%", { role: "style" }, { role: "annotation" }]);
+    for (let i = 0; i < unscaledData.length; i++) {
+      let row = [];
+      row.push(unscaledData[i].state);
+      row.push(parseInt(unscaledData[i].value * 100));
+      row.push(this.state.gradientWith52Colors[100 - row[1]]);
+      row.push(row[1] + "%");
+      data.push(row);
+    }
     data.sort(function(a, b) {
       return b[1] - a[1];
     });
-    data[0][3] = { role: "annotation" };
-    for (let a = 1; a < data.length; a++) {
-      //data[a][2] = this.state.gradientWith52Colors[a];
-      data[a][2] = this.state.gradientWith52Colors[100 - data[a][1]];
-      data[a][3] = data[a][1] + "%";
-      data[a][0] = data[a][0] + " " + a;
-    }
 
+    for (let i = 1; i < data.length; i++) {
+      data[i][0] = data[i][0] + " " + i;
+    }
     this.setState({ result: data });
   }
 
@@ -393,7 +391,7 @@ class ColumnChart extends React.Component {
     return (
       <div style={{ backgroundColor: "white" }}>
         <Row
-          style={{ "padding-left": 40 }}
+          style={{ paddingLeft: 40 }}
           sm="0"
           className="d-none d-sm-inline-block"
         >
@@ -435,10 +433,7 @@ class ColumnChart extends React.Component {
         </Row>
         <Row>
           <Col lg="1" />
-          <Col
-            lg="3"
-            style={{ "padding-left": 50, backgroundColor: "#F0F0F0" }}
-          >
+          <Col lg="3" style={{ paddingLeft: 50, backgroundColor: "#F0F0F0" }}>
             <Row sm="1">
               <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                 <DropdownToggle caret>{this.state.selectedYear}</DropdownToggle>
