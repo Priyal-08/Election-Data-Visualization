@@ -78,6 +78,32 @@ module.exports.getVoterTurnOut = function(req, res) {
 };
 
 
+module.exports.getDisabilityRate = function(req, res) {
+  console.log("Disability");
+  const years = [2008, 2010, 2012, 2014, 2016];
+  var DisMap = [];
+  years.forEach(y =>
+    election.find({ year: y }, function(err, electionresult) {
+      var count = electionresult.length;
+      var sum = 0;
+      for (var i = 0; i < count; i++) {
+        sum += parseFloat(electionresult[i]["nonvoter_illness_pct"]);
+      }
+      var dis = 0.0;
+      dis = (sum / count) * 100;
+      var data = [];
+      data.push(y);
+      data.push(dis);
+      DisMap.push(data);
+    })
+  );
+  sleep(1000).then(() => {
+    res.json(DisMap.sort());
+  });
+  console.log(DisMap);
+};
+
+
 module.exports.getStateKpiDataByYear = function(req, res) {
   let year = req.params.year;
   let state = req.params.state;
