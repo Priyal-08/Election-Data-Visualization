@@ -36,8 +36,6 @@ router.get("/voterturnout/:id", modelMain.getVoterTurnOut);
  */
 router.get("/disability/:id", modelMain.getDisabilityRate);
 
-
-
 /*
  * Get KPI data state and year wise
  */
@@ -46,7 +44,18 @@ router.get("/kpi/state/:state/year/:year", modelMain.getStateKpiDataByYear);
 /*
  * Get KPI's rank for state and year wise
  */
-router.get("/kpi/rank/state/:state/year/:year", modelMain.getStateKpiRankDataByYear);
+router.get(
+  "/kpi/rank/state/:state/year/:year",
+  modelMain.getStateKpiRankDataByYear
+);
 
+router.get("/waittime/:id", modelMain.getVoterWaitTime);
+
+router.get("/datacompleteness/:id", modelMain.getDataCompleteness);
+
+router.get(
+  "/onlineregistration/:id",
+  modelMain.getTotalStateWithOnlineRegistration
+);
 
 module.exports = router;

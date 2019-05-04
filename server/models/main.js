@@ -25,8 +25,6 @@ module.exports.getStateById = function(req, res) {
   });
 };
 
-
-
 module.exports.getYearDataById = function(req, res) {
   let id = req.params.id;
   election.find({ year: id }, function(err, electionresult) {
@@ -77,6 +75,79 @@ module.exports.getVoterTurnOut = function(req, res) {
   console.log(myMap);
 };
 
+function getMax(data, column) {
+  var max = Number.MIN_VALUE;
+  for (var i = 0; i < data.length; i++) {
+    if (isNaN(parseInt(data[i][column]))) continue;
+    if (Number(data[i][column]) > max) max = data[i][column];
+  }
+  return max;
+}
+
+function getMin(data, column) {
+  var min = Number.MAX_VALUE;
+  for (var i = 0; i < data.length; i++) {
+    if (isNaN(parseInt(data[i][column]))) continue;
+    if (Number(data[i][column]) < min) min = data[i][column];
+  }
+  return min;
+}
+
+module.exports.getVoterWaitTime = function(req, res) {
+  console.log("Voter Wait Time");
+  const years = [2008, 2010, 2012, 2014, 2016];
+  var myMap = [];
+  years.forEach(y =>
+    election.find({ year: y }, function(err, electionresult) {
+      var count = electionresult.length;
+      var sum = 0;
+      var sumproblems = 0;
+      console.log("Year : " + y);
+      // var min = this.getMin(electionresult, "wait");
+      // var max = this.getMax(electionresult, "wait");
+      var column = "wait";
+      var max = Number.MIN_VALUE;
+      for (var i = 0; i < electionresult.length; i++) {
+        if (isNaN(parseInt(electionresult[i][column]))) continue;
+        if (Number(electionresult[i][column]) > max)
+          max = electionresult[i][column];
+      }
+
+      var min = Number.MAX_VALUE;
+      for (var i = 0; i < electionresult.length; i++) {
+        if (isNaN(parseInt(electionresult[i][column]))) continue;
+        if (Number(electionresult[i][column]) < min)
+          min = electionresult[i][column];
+      }
+
+      console.log("Min max values");
+
+      for (var i = 0; i < electionresult.length; i++) {
+        electionresult[i]["wait"] =
+          (electionresult[i]["wait"] - min) / (max - min);
+      }
+      console.log("Normalized");
+      for (var i = 0; i < count; i++) {
+        sum += parseFloat(electionresult[i]["wait"]);
+        if (isNaN(parseInt(electionresult[i]["reg_rej"]))) continue;
+        else sumproblems += parseFloat(electionresult[i]["reg_rej"]);
+      }
+      var vwt = 0.0;
+      var nvr = 0.0;
+      vwt = (sum / count) * 100;
+      nvr = (sumproblems / count) * 100;
+      var data = [];
+      data.push(y);
+      data.push(vwt);
+      data.push(nvr);
+      myMap.push(data);
+    })
+  );
+  sleep(1000).then(() => {
+    console.log(myMap);
+    res.json(myMap.sort());
+  });
+};
 
 module.exports.getDisabilityRate = function(req, res) {
   console.log("Disability");
@@ -87,7 +158,9 @@ module.exports.getDisabilityRate = function(req, res) {
       var count = electionresult.length;
       var sum = 0;
       for (var i = 0; i < count; i++) {
-        sum += parseFloat(electionresult[i]["nonvoter_illness_pct"]);
+        if (isNaN(parseInt(electionresult[i]["nonvoter_illness_pct"])))
+          continue;
+        else sum += parseFloat(electionresult[i]["nonvoter_illness_pct"]);
       }
       var dis = 0.0;
       dis = (sum / count) * 100;
@@ -103,93 +176,171 @@ module.exports.getDisabilityRate = function(req, res) {
   console.log(DisMap);
 };
 
+module.exports.getDataCompleteness = function(req, res) {
+  console.log("Data Completeness");
+  const years = [2008, 2010, 2012, 2014, 2016];
+  var DisMap = [];
+  years.forEach(y =>
+    election.find({ year: y }, function(err, electionresult) {
+      var count = electionresult.length;
+      var sum = 0;
+      for (var i = 0; i < count; i++) {
+        if (isNaN(parseInt(electionresult[i]["eavs_completeness"]))) continue;
+        else sum += parseFloat(electionresult[i]["eavs_completeness"]);
+      }
+      var dis = 0.0;
+      dis = (sum / count) * 100;
+      var data = [];
+      data.push(y);
+      data.push(dis);
+      DisMap.push(data);
+    })
+  );
+  sleep(1000).then(() => {
+    res.json(DisMap.sort());
+  });
+  console.log(DisMap);
+};
+
+module.exports.getTotalStateWithOnlineRegistration = function(req, res) {
+  console.log("Data Completeness");
+  const years = [2008, 2010, 2012, 2014, 2016];
+  var DisMap = [];
+  years.forEach(y =>
+    election.find({ year: y }, function(err, electionresult) {
+      var count = electionresult.length;
+      var sum = 0;
+      for (var i = 0; i < count; i++) {
+        if (isNaN(parseInt(electionresult[i]["online_reg"]))) continue;
+        else sum += parseInt(electionresult[i]["online_reg"]);
+      }
+      var dis = sum;
+      var data = [];
+      data.push(y);
+      data.push(dis);
+      DisMap.push(data);
+    })
+  );
+  sleep(1000).then(() => {
+    res.json(DisMap.sort());
+  });
+  console.log(DisMap);
+};
 
 module.exports.getStateKpiDataByYear = function(req, res) {
   let year = req.params.year;
   let state = req.params.state;
   var resMap = {};
-  election.find({ year: year, state_abbv: state}, { '_id': 0, 'vep_turnout':1, 'wait':1,'nonvoter_illness_pct':1, 'pct_reg_of_vep_vrs':1 }, function(err, electionresult) {
-    if (err) return next(err);
-    var VoterTurnOut = electionresult[0]["vep_turnout"] * 100;
-    var Disability = electionresult[0]["nonvoter_illness_pct"] * 100;
-    var Vrr = electionresult[0]["pct_reg_of_vep_vrs"] * 100;
-    resMap['Turnout'] = VoterTurnOut.toFixed(2);;
-    resMap['Disability'] = Disability.toFixed(2);;
-    resMap['Wait'] = parseFloat(electionresult[0]["wait"]).toFixed(2);;
-    resMap['Vrr'] = Vrr.toFixed(2);
-    console.log(resMap);
-    res.json(resMap);
-  });
+  election.find(
+    { year: year, state_abbv: state },
+    {
+      _id: 0,
+      vep_turnout: 1,
+      wait: 1,
+      nonvoter_illness_pct: 1,
+      pct_reg_of_vep_vrs: 1
+    },
+    function(err, electionresult) {
+      if (err) return next(err);
+      var VoterTurnOut = electionresult[0]["vep_turnout"] * 100;
+      var Disability = electionresult[0]["nonvoter_illness_pct"] * 100;
+      var Vrr = electionresult[0]["pct_reg_of_vep_vrs"] * 100;
+      resMap["Turnout"] = VoterTurnOut.toFixed(2);
+      resMap["Disability"] = Disability.toFixed(2);
+      resMap["Wait"] = parseFloat(electionresult[0]["wait"]).toFixed(2);
+      resMap["Vrr"] = Vrr.toFixed(2);
+      console.log(resMap);
+      res.json(resMap);
+    }
+  );
 };
-
 
 var resJson = {};
 module.exports.getStateKpiRankDataByYear = function(req, res) {
   let year = req.params.year;
   let state = req.params.state;
-  election.find({ year: year }, { '_id': 0, 'nonvoter_illness_pct':1, "state_abbv":1 }, function(err, disRes) {
-    var Dmap = new Map();
-    var key, value;
-    var count = disRes.length;
-    for (var i = 0; i < count; i++) {
-      key = disRes[i]["state_abbv"];
-      value = disRes[i]["nonvoter_illness_pct"] * 100;
-      Dmap.set(key,value);
+  election.find(
+    { year: year },
+    { _id: 0, nonvoter_illness_pct: 1, state_abbv: 1 },
+    function(err, disRes) {
+      var Dmap = new Map();
+      var key, value;
+      var count = disRes.length;
+      for (var i = 0; i < count; i++) {
+        key = disRes[i]["state_abbv"];
+        value = disRes[i]["nonvoter_illness_pct"] * 100;
+        Dmap.set(key, value);
+      }
+      var temp = new Map(
+        [...Dmap].sort((a, b) => (a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1))
+      );
+      var arr = Array.from(temp.keys());
+      resJson["Disability"] = arr.indexOf(state) + 1;
     }
-    var temp = new Map([...Dmap].sort((a, b) => a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1));
-    var arr = Array.from(temp.keys());
-    resJson["Disability"] = arr.indexOf(state) + 1;
-  });
+  );
 
-
-  election.find({ year: year }, { '_id': 0, 'vep_turnout':1, "state_abbv":1} , function(err, vepRes) {
-    var Vmap = new Map();
-    var key1, value1;
-    var count1 = vepRes.length;
-    for (var i = 0; i < count1; i++) {
-      key1 = vepRes[i]["state_abbv"];
-      value1 = vepRes[i]["vep_turnout"] * 100;
-      Vmap.set(key1,value1);
+  election.find(
+    { year: year },
+    { _id: 0, vep_turnout: 1, state_abbv: 1 },
+    function(err, vepRes) {
+      var Vmap = new Map();
+      var key1, value1;
+      var count1 = vepRes.length;
+      for (var i = 0; i < count1; i++) {
+        key1 = vepRes[i]["state_abbv"];
+        value1 = vepRes[i]["vep_turnout"] * 100;
+        Vmap.set(key1, value1);
+      }
+      var temp = new Map(
+        [...Vmap].sort((a, b) => (a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1))
+      );
+      var arr = Array.from(temp.keys());
+      resJson["Turnout"] = 51 - arr.indexOf(state);
     }
-    var temp = new Map([...Vmap].sort((a, b) => a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1));
-    var arr = Array.from(temp.keys());
-    resJson["Turnout"] = 51 - arr.indexOf(state) ;
-  });
+  );
 
-
-  election.find({ year: year }, { '_id': 0, 'wait':1, "state_abbv":1}, function(err, waitRes) {
+  election.find({ year: year }, { _id: 0, wait: 1, state_abbv: 1 }, function(
+    err,
+    waitRes
+  ) {
     var Wmap = new Map();
     var key2, value2;
     var count2 = waitRes.length;
     for (var i = 0; i < count2; i++) {
       key2 = waitRes[i]["state_abbv"];
       value2 = parseFloat(waitRes[i]["wait"]);
-      Wmap.set(key2,value2);
+      Wmap.set(key2, value2);
     }
-    var temp = new Map([...Wmap].sort((a, b) => a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1));
+    var temp = new Map(
+      [...Wmap].sort((a, b) => (a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1))
+    );
     var arr = Array.from(temp.keys());
     resJson["Wait"] = arr.indexOf(state) + 1;
   });
 
-  election.find({ year: year }, { '_id': 0, 'pct_reg_of_vep_vrs':1, "state_abbv":1} , function(err, vrrRes) {
-    var Rmap = new Map();
-    var key3, value3;
-    var count = vrrRes.length;
-    for (var i = 0; i < count; i++) {
-      key3 = vrrRes[i]["state_abbv"];
-      value3 = vrrRes[i]["pct_reg_of_vep_vrs"] * 100;
-      Rmap.set(key3,value3);
+  election.find(
+    { year: year },
+    { _id: 0, pct_reg_of_vep_vrs: 1, state_abbv: 1 },
+    function(err, vrrRes) {
+      var Rmap = new Map();
+      var key3, value3;
+      var count = vrrRes.length;
+      for (var i = 0; i < count; i++) {
+        key3 = vrrRes[i]["state_abbv"];
+        value3 = vrrRes[i]["pct_reg_of_vep_vrs"] * 100;
+        Rmap.set(key3, value3);
+      }
+      var temp = new Map(
+        [...Rmap].sort((a, b) => (a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1))
+      );
+      console.log(temp);
+      var arr = Array.from(temp.keys());
+      resJson["Vrr"] = 51 - arr.indexOf(state);
     }
-    var temp = new Map([...Rmap].sort((a, b) => a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1));
-    console.log(temp);
-    var arr = Array.from(temp.keys());
-    resJson["Vrr"] = 51 - arr.indexOf(state) ;
-  });
+  );
   console.log(resJson);
   res.json(resJson);
 };
-
-
 
 function MyCSV(
   state_abbv,

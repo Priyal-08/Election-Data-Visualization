@@ -6,8 +6,15 @@ import axios from "axios";
 import HorizontalChart from "./horizontalChart";
 import ColumnChart from "./columnChart";
 import SLine from "./sLine";
+import DLine from "./DisabilityLineGraph";
 import Map from "./map";
+import StateComparisonChart from "../StateComparison/ColumnChart";
+import DataCompleteness from "./DataCompleteness";
+import OnlineRegistration from "./OnlineRegistration";
+import Widget02 from "../Widgets/Widget02";
+import { CardGroup, Col, Row } from "reactstrap";
 
+import { Widgets } from "..";
 const line = {
   labels: ["January", "February", "March", "April", "May", "June", "July"],
   datasets: [
@@ -131,153 +138,58 @@ const options = {
 class Charts extends Component {
   constructor() {
     super();
-    // this.state = {
-    //   bar: {
-    //     labels: [],
-    //     datasets: [
-    //       {
-    //         label: "Voter Turn-out",
-    //         backgroundColor: "rgba(255,99,132,0.2)",
-    //         borderColor: "rgba(255,99,132,1)",
-    //         borderWidth: 1,
-    //         hoverBackgroundColor: "rgba(255,99,132,0.4)",
-    //         hoverBorderColor: "rgba(255,99,132,1)",
-    //         data: [65, 59, 80, 81, 56, 55, 40]
-    //       }
-    //     ]
-    //   },
-
-    //   chartData: {
-    //     labels: [],
-    //     datasets: [
-    //       {
-    //         label: "State wise wait time in year 2016 (in minutes)",
-    //         fill: false,
-    //         lineTension: 0.1,
-    //         backgroundColor: [],
-    //         borderColor: "rgba(75,192,192,1)",
-    //         borderCapStyle: "butt",
-    //         aspectRatio: 1,
-    //         borderJoinStyle: "miter",
-    //         pointBorderColor: "rgba(75,192,192,1)",
-    //         pointBackgroundColor: "#fff",
-    //         pointBorderWidth: 1,
-    //         pointHoverRadius: 5,
-    //         pointHoverBackgroundColor: "rgba(75,192,192,1)",
-    //         pointHoverBorderColor: "rgba(220,220,220,1)",
-    //         pointHoverBorderWidth: 2,
-    //         pointRadius: 1,
-    //         pointHitRadius: 10,
-    //         beginAtZero: true,
-    //         data: []
-    //       }
-    //     ]
-    //   },
-    //   options: {
-    //     maintainAspectRatio: false,
-    //     legend: {
-    //       labels: {
-    //         fontFamily: "Source Sans Pro",
-    //         fontSize: 18,
-    //         fontWeight: "bold",
-    //         fontColor: "black"
-    //       }
-    //     },
-    //     scales: {
-    //       yAxes: [
-    //         {
-    //           gridLines: {
-    //             display: false
-    //           }
-    //         }
-    //       ],
-    //       xAxes: [
-    //         {
-    //           gridLines: {
-    //             display: false
-    //           }
-    //         }
-    //       ]
-    //     }
-    //   }
-    // };
   }
-
-  // getChartData() {
-  //   axios
-  //     .get("http://localhost:4000/elections/voterturnout/1")
-  //     .then(response => {
-  //       console.log(response);
-  //       var data = this.state.bar;
-  //       console.log(data);
-  //       // var row = [];
-  //       for (var i = 0; i < response.data.length; ++i) {
-  //         data.labels.push(response.data[i][0].toString());
-  //         data.datasets[0].data.push(response.data[i][1]);
-  //         // row.push("light-blue");
-  //         // data.push(row);
-  //       }
-  //       console.log(data);
-  //       this.setState({ bar: data });
-  //     })
-  //     .catch(function(error) {
-  //       console.log(error);
-  //     });
-
-  //   axios
-  //     .get("http://localhost:4000/elections/year/2016")
-  //     .then(response => {
-  //       console.log(response);
-  //       var data = this.state.chartData;
-  //       for (var i = 0; i < response.data.length; i++) {
-  //         data.labels.push(response.data[i].state_fips);
-  //         data.datasets[0].data.push(
-  //           response.data[i].wait === ""
-  //             ? "Incomplete Data"
-  //             : response.data[i].wait
-  //         );
-  //         if (response.data[i].wait !== "" && response.data[i].wait < 17) {
-  //           data.datasets[0].backgroundColor.push("rgba(75,192,192,0.4)");
-  //         } else {
-  //           data.datasets[0].backgroundColor.push("#ff3232");
-  //         }
-  //       }
-  //       this.setState({ chartData: data });
-  //     })
-  //     .catch(function(error) {
-  //       console.log(error);
-  //     });
-  // }
-  // componentDidMount() {
-  //   console.log("Inside mount");
-  //   this.getChartData();
-  //   console.log("bar data");
-  //   console.log(this.state.bar);
-  // }
 
   render() {
     return (
       <div className="animated fadeIn">
-        <CardColumns className="cols-2">
-          <Card>
-            {/* <CardHeader>
-              Line Chart
-              <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
+        <CardColumns className="cols-3">
+          <Card style={{ height: "590px", width: "100%" }}>
+            <CardHeader>
+              <b>% Data Completeness</b>
+            </CardHeader>
+            <CardBody style={{ height: "590px", width: "100%" }}>
+              <div
+                className="chart-wrapper"
+                style={{ height: "90%", width: "100%" }}
+              >
+                <DataCompleteness />
               </div>
-            </CardHeader> */}
+            </CardBody>
+          </Card>
+          <Card style={{ height: "100%", width: "100%" }}>
+            <CardHeader>
+              <b>% Voter turnout</b>
+            </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
-                {/* <Line data={line} options={options} /> */}
+                {/* <Bar data={this.state.bar} options={options} /> */}
+                <ColumnChart />
+              </div>
+            </CardBody>
+          </Card>
+          <Card
+            style={{
+              height: "100%",
+              width: "100%",
+              fontFamily: "sans-serif"
+            }}
+          >
+            <CardHeader>
+              <b>Wait time and Registration rejection correlation</b>
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
                 <SLine />
               </div>
             </CardBody>
           </Card>
-          <Card>
+          <Card style={{ height: "100%", width: "100%" }}>
+            <CardHeader>
+              <b>% Non-Voters due to disability related problems</b>
+            </CardHeader>
             {/* <CardHeader>
-              Bar Chart
+              "States with online registration"
               <div className="card-header-actions">
                 <a href="http://www.chartjs.org" className="card-header-action">
                   <small className="text-muted">docs</small>
@@ -287,39 +199,18 @@ class Charts extends Component {
             <CardBody>
               <div className="chart-wrapper">
                 {/* <Bar data={this.state.bar} options={options} /> */}
-                <ColumnChart />
+                <DLine />
               </div>
             </CardBody>
           </Card>
-          <Card>
-            {/* <CardHeader>
-              Map
-              <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
-              </div>
-            </CardHeader> */}
+          <Card style={{ height: "100%", width: "100%" }}>
+            <CardHeader>
+              <b>States with online registration</b>
+            </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
-                {/* <Doughnut data={doughnut} /> */}
-                <Map />
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            {/* <CardHeader>
-              Map
-              <div className="card-header-actions">
-                <a href="http://www.chartjs.org" className="card-header-action">
-                  <small className="text-muted">docs</small>
-                </a>
-              </div>
-            </CardHeader> */}
-            <CardBody>
-              <div className="chart-wrapper">
-                {/* <Doughnut data={doughnut} /> */}
-                <Map />
+                {/* <Bar data={this.state.bar} options={options} /> */}
+                <OnlineRegistration />
               </div>
             </CardBody>
           </Card>
@@ -381,6 +272,46 @@ class Charts extends Component {
               </div>
             </CardBody>
           </Card> */}
+        </CardColumns>
+        <CardColumns>
+          <Widget02
+            icon="icon-pie-chart"
+            color="primary"
+            header="50"
+            mainText="Total States"
+          />
+          <Widget02
+            icon="icon-pie-chart"
+            color="primary"
+            header="4"
+            mainText="Total Years analyzed"
+          />
+          <Widget02
+            icon="icon-pie-chart"
+            color="primary"
+            header="4"
+            mainText="Total data sources"
+          />
+        </CardColumns>
+        <CardColumns className="mb-3">
+          <Widget02
+            icon="icon-pie-chart"
+            color="primary"
+            header="6"
+            mainText="Key primary indicators"
+          />
+          <Widget02
+            icon="icon-pie-chart"
+            color="primary"
+            header="256"
+            mainText="Total rows of data"
+          />
+          <Widget02
+            icon="icon-pie-chart"
+            color="primary"
+            header="4"
+            mainText="Total elections analyzed"
+          />
         </CardColumns>
       </div>
     );

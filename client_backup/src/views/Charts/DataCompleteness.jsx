@@ -1,39 +1,42 @@
 import React from "react";
-// import ReactDOM from "react-dom";
-import Chart from "react-google-charts";
+// import { Line } from "react-chartjs-2";
 import axios from "axios";
-
-export default class ColumnChart extends React.Component {
+import Chart from "react-google-charts";
+class DataCompleteness extends React.Component {
   constructor() {
     super();
     this.state = {
       result: [],
       options: {
-        // title: "Voter Turnout",
+        // title: "% Data Completeness",
+        // bars: "horizontal"
+        legend: "none",
         titleTextStyle: {
           color: "black",
           fontSize: 15
         },
-        pointSize: 5,
-        legend: { position: "none" },
-        // hAxis: { title: "Year" },
-        // vAxis: { title: "% of voters turn-out" },
+        pointSize: 7,
+        curveType: "function",
         fontSize: 12
       }
     };
   }
+
   componentDidMount() {
-    // console.log("inside column function");
+    this.getChartData();
+  }
+
+  getChartData() {
     axios
-      .get("http://localhost:4000/elections/voterturnout/1")
+      .get("http://localhost:4000/elections/datacompleteness/1")
       .then(response => {
+        var data = response.data;
         var data = [];
-        data.push(["Years", "Turn-out", { role: "style" }]);
+        data.push(["Years", "% Data Completeness"]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
           row.push(response.data[i][0].toString());
           row.push(response.data[i][1]);
-          row.push("color: rgb(51, 102, 204)");
           data.push(row);
         }
         console.log(data);
@@ -47,9 +50,10 @@ export default class ColumnChart extends React.Component {
   render() {
     return (
       <Chart
-        width={"100%"}
         height={"100%"}
-        chartType="AreaChart"
+        width={"100%"}
+        chartType="LineChart"
+        loader={<div>Loading Chart</div>}
         data={this.state.result}
         options={this.state.options}
       />
@@ -57,6 +61,4 @@ export default class ColumnChart extends React.Component {
   }
 }
 
-// const rootElement = document.getElementById("root");
-// ReactDOM.render(<App />, rootElement);
-// export default ColumnChart;
+export default DataCompleteness;

@@ -3,21 +3,22 @@ import React from "react";
 import Chart from "react-google-charts";
 import axios from "axios";
 
-export default class ColumnChart extends React.Component {
+export default class OnlineRegistration extends React.Component {
   constructor() {
     super();
     this.state = {
       result: [],
       options: {
-        // title: "Voter Turnout",
+        // title: "States with online registration",
         titleTextStyle: {
           color: "black",
           fontSize: 15
         },
-        pointSize: 5,
-        legend: { position: "none" },
-        // hAxis: { title: "Year" },
-        // vAxis: { title: "% of voters turn-out" },
+        // hAxis: { title: "Year", minValue: 0, maxValue: 15 },
+        // vAxis: { title: "% of voters turn-out", minValue: 0, maxValue: 15 },
+        legend: {
+          position: "none"
+        },
         fontSize: 12
       }
     };
@@ -25,10 +26,10 @@ export default class ColumnChart extends React.Component {
   componentDidMount() {
     // console.log("inside column function");
     axios
-      .get("http://localhost:4000/elections/voterturnout/1")
+      .get("http://localhost:4000/elections/onlineregistration/1")
       .then(response => {
         var data = [];
-        data.push(["Years", "Turn-out", { role: "style" }]);
+        data.push(["Years", "No. of states", { role: "style" }]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
           row.push(response.data[i][0].toString());
@@ -49,7 +50,7 @@ export default class ColumnChart extends React.Component {
       <Chart
         width={"100%"}
         height={"100%"}
-        chartType="AreaChart"
+        chartType="ColumnChart"
         data={this.state.result}
         options={this.state.options}
       />
@@ -59,4 +60,4 @@ export default class ColumnChart extends React.Component {
 
 // const rootElement = document.getElementById("root");
 // ReactDOM.render(<App />, rootElement);
-// export default ColumnChart;
+// export default OnlineRegistration;

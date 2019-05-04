@@ -1,39 +1,42 @@
 import React from "react";
-// import ReactDOM from "react-dom";
-import Chart from "react-google-charts";
+// import { Line } from "react-chartjs-2";
 import axios from "axios";
-
-export default class ColumnChart extends React.Component {
+import Chart from "react-google-charts";
+class DisabilityLineGraph extends React.Component {
   constructor() {
     super();
     this.state = {
       result: [],
       options: {
-        // title: "Voter Turnout",
+        // title: "% Non-Voters due to disability related problems",
+        legend: "none",
+        bars: "horizontal",
+        bar: { groupWidth: "30%" },
         titleTextStyle: {
           color: "black",
           fontSize: 15
         },
-        pointSize: 5,
-        legend: { position: "none" },
-        // hAxis: { title: "Year" },
-        // vAxis: { title: "% of voters turn-out" },
         fontSize: 12
       }
     };
   }
+
   componentDidMount() {
-    // console.log("inside column function");
+    this.getChartData();
+  }
+
+  getChartData() {
     axios
-      .get("http://localhost:4000/elections/voterturnout/1")
+      .get("http://localhost:4000/elections/disability/1")
       .then(response => {
+        var data = response.data;
         var data = [];
-        data.push(["Years", "Turn-out", { role: "style" }]);
+        data.push(["Years", "% Non-Voters"]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
           row.push(response.data[i][0].toString());
           row.push(response.data[i][1]);
-          row.push("color: rgb(51, 102, 204)");
+          // row.push("color:#63c2de");
           data.push(row);
         }
         console.log(data);
@@ -47,9 +50,8 @@ export default class ColumnChart extends React.Component {
   render() {
     return (
       <Chart
-        width={"100%"}
-        height={"100%"}
-        chartType="AreaChart"
+        chartType="BarChart"
+        loader={<div>Loading Chart</div>}
         data={this.state.result}
         options={this.state.options}
       />
@@ -57,6 +59,4 @@ export default class ColumnChart extends React.Component {
   }
 }
 
-// const rootElement = document.getElementById("root");
-// ReactDOM.render(<App />, rootElement);
-// export default ColumnChart;
+export default DisabilityLineGraph;
