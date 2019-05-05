@@ -23,11 +23,11 @@ import {
 } from 'reactstrap';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
-import Map from "../Charts/map";
 import ColumnChart from "./columnChart";
 import SLine from "./sLine";
 import DLine from "./DisabilityLineGraph";
 import OnlineRegistration from "./OnlineRegistration";
+import Map from "../Charts/map";
 
 import { getFromStorage, setInStorage } from '../storage';
 
@@ -477,6 +477,14 @@ class StateDetail extends Component {
       rank_vrr:'44',
       state_value: "TX",
     };
+    this.childHandler = this.childHandler.bind(this);
+  }
+
+  childHandler(dataFromChild) {
+    // log our state before and after we updated it
+    console.log(dataFromChild);
+    // this.setState({state_value: dataFromChild})
+    this.onStateBtnClick(dataFromChild);
   }
 
   onRadioBtnClick(year) {
@@ -485,10 +493,25 @@ class StateDetail extends Component {
     this.setState({
       year: year,
     });
-    console.log(year);
+    this.getStateDetails();
+  }
+
+  onStateBtnClick(state) {
+    //Turnout, Disability, Wait, VRR 
+    var state;
+    this.setState({
+      state_value: state,
+    });
+
+    this.getStateDetails();
+  }
+
+  getStateDetails(){
+    // console.log(year);
     try {
       var url =
-        "http://localhost:4000/elections/kpi/state/TX/year/" + year;
+        "http://localhost:4000/elections/kpi/state/" + this.state.state_value + "/year/" +this.state.year;
+        console.log(url);
       fetch(url)
         .then(res => res.json())
         .then(json => {
@@ -513,7 +536,8 @@ class StateDetail extends Component {
     }
     try {
       var url =
-        "http://localhost:4000/elections/kpi/rank/state/TX/year/" + year;
+        "http://localhost:4000/elections/kpi/rank/state/" + this.state.state_value + "/year/" + this.state.year;
+        console.log(url);
       fetch(url)
         .then(res => res.json())
         .then(json => {
@@ -560,10 +584,10 @@ class StateDetail extends Component {
                     </ButtonToolbar>
                   </Col>
         <Row>
-          <Col xs="12" sm="12" lg="4">
-            <Map/>
+          <Col xs="12" sm="12" lg="6">
+            <Map action={this.childHandler} />
           </Col>
-          <Col xs="12" sm="12" lg="8" style={{paddingLeft: 50}}>
+          <Col xs="12" sm="12" lg="6">
             <Card className="white" style={{textAlign: "center", height: 300}}>
               <CardBody className="pb-0">
                 <h1 style={{fontWeight: "bold"}}>California</h1>
