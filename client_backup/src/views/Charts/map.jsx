@@ -30,9 +30,15 @@ ReactFC.fcRoot(FusionCharts, FusionMaps, USA, FusionTheme);
 
 // Step 8 - Creating the DOM element to pass the react-fusioncharts component
 export default class Map extends React.Component {
+  constructor(props) {
+    super(props);
+    this.showPlotValue = this.showPlotValue.bind(this);
+  }
   state = {
-    result: []
+    result: [],
+    stateLabel: ""
   };
+  tempState = {};
   chartConfigs = {
     type: "usa",
     // width: "700",
@@ -82,22 +88,37 @@ export default class Map extends React.Component {
       });
     }
   };
+
   componentDidMount() {
     axios
       .get("http://localhost:4000/elections/year/2016")
       .then(response => {
         // console.log(response.data);
         this.setState({ result: response.data });
+        this.tempState = this.state;
       })
       .catch(function(error) {
         console.log(error);
       });
   }
 
+  showPlotValue(evt, data) {
+    // console.log("State : " + this.state);
+    // alert("You have clicked on " + data.shortLabel + ".");
+    this.setState({ stateLabel: data.shortLabel });
+    this.props.action(this.state.stateLabel);
+  }
+
   render() {
     this.loadData();
     this.chartConfigs.dataSource.data = this.temp;
-    return <ReactFC {...this.chartConfigs} />;
+    return (
+      <ReactFC
+        {...this.chartConfigs}
+        fcEvent-entityClick={this.showPlotValue}
+        // onClick={() => this.props.action(this.state.stateLabel)}
+      />
+    );
   }
 }
 
