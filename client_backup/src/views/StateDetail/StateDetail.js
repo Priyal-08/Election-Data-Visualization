@@ -8,6 +8,7 @@ import {
   ButtonToolbar,
   Card,
   CardBody,
+  CardColumns,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -23,6 +24,10 @@ import {
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 import Map from "../Charts/map";
+import ColumnChart from "./columnChart";
+import SLine from "./sLine";
+import DLine from "./DisabilityLineGraph";
+import OnlineRegistration from "./OnlineRegistration";
 
 import { getFromStorage, setInStorage } from '../storage';
 
@@ -462,16 +467,76 @@ class StateDetail extends Component {
     this.state = {
       dropdownOpen: false,
       year: 2016,
+      kpi_turnout:'51.59',
+      kpi_disability:'11.84',
+      kpi_wait:'10.98',
+      kpi_vrr:'80.35',
+      rank_turnout:'48',
+      rank_disability:'14',
+      rank_wait:'36',
+      rank_vrr:'44',
+      state_value: "TX",
     };
   }
 
   onRadioBtnClick(year) {
+    //Turnout, Disability, Wait, VRR 
     var year;
     this.setState({
       year: year,
     });
+    console.log(year);
+    try {
+      var url =
+        "http://localhost:4000/elections/kpi/state/TX/year/" + year;
+      fetch(url)
+        .then(res => res.json())
+        .then(json => {
+          console.log(json.message);
+          var turnout = json.Turnout; 
+          var disability = json.Disability;
+          var wait = json.Wait; 
+          var vrr = json.Vrr;
+          // console.log(typeof data);
+          // data = JSON.parse(data);
+          console.log("Turnout: " + turnout + "Disability: " + disability + "Wait: " + wait + "VRR: " + vrr);
+          
+          this.setState({ 
+            kpi_turnout: turnout,
+            kpi_disability: disability,
+            kpi_wait: wait=="NaN"? "NA" : wait,
+            kpi_vrr: vrr
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+    try {
+      var url =
+        "http://localhost:4000/elections/kpi/rank/state/TX/year/" + year;
+      fetch(url)
+        .then(res => res.json())
+        .then(json => {
+          console.log(json.message);
+          var turnout_rank = json.Turnout; 
+          var disability_rank = json.Disability;
+          var wait_rank = json.Wait; 
+          var vrr_rank = json.Vrr;
+          // console.log(typeof data);
+          // data = JSON.parse(data);
+          console.log("Turnout: " + turnout_rank + "Disability: " + disability_rank + "Wait: " + wait_rank + "VRR: " + vrr_rank);
+          this.setState({ 
+            rank_turnout: turnout_rank,
+            rank_disability: disability_rank,
+            rank_wait: wait_rank,
+            rank_vrr: vrr_rank
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }
-  
+
   toggle() {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
@@ -481,7 +546,7 @@ class StateDetail extends Component {
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   render() {
-   alert('Year selected:::' + this.state.year);
+   //alert('Year selected:::' + this.state.year);
     return (
       <div className="animated fadeIn">
       <Col sm="0" className="d-none d-sm-inline-block">
@@ -515,7 +580,7 @@ class StateDetail extends Component {
             <Card className="text-white bg-info">
               <CardBody className="pb-0">
                 <div>Percentage of disabled voters</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>{this.state.year}</h1>
+                <h1 style={{textAlign: "center", fontSize: 50}}>{this.state.kpi_disability}%</h1>
               </CardBody>
             </Card>
           </Col>
@@ -525,7 +590,7 @@ class StateDetail extends Component {
             <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div>Percentage of voter wait time</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>40%</h1>
+                <h1 style={{textAlign: "center", fontSize: 50}}>{this.state.kpi_wait}</h1>
               </CardBody>
             </Card>
           </Col>
@@ -535,7 +600,7 @@ class StateDetail extends Component {
             <Card className="text-white bg-warning">
               <CardBody className="pb-0">
                 <div>Percentage of Registration Rate</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>87%</h1>
+                <h1 style={{textAlign: "center", fontSize: 50}}>{this.state.kpi_vrr}%</h1>
               </CardBody>
             </Card>
           </Col>
@@ -545,7 +610,7 @@ class StateDetail extends Component {
             <Card className="text-white bg-danger">
               <CardBody className="pb-0">
                 <div>Percentage of Voter Turnout</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>76%</h1>
+                <h1 style={{textAlign: "center", fontSize: 50}}>{this.state.kpi_turnout}%</h1>
               </CardBody>
             </Card>
           </Col>
@@ -555,7 +620,7 @@ class StateDetail extends Component {
             <Card className="text-white bg-info">
               <CardBody className="pb-0">
                 <div style={{textAlign: "center"}}>Standing amongst other states</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>1</h1>
+                <h1 style={{textAlign: "center", fontSize: 50}}>{this.state.rank_disability}</h1>
               </CardBody>
             </Card>
           </Col>
@@ -564,7 +629,7 @@ class StateDetail extends Component {
             <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div style={{textAlign: "center"}}>Standing amongst other states</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>7</h1>
+                <h1 style={{textAlign: "center", fontSize: 50}}>{this.state.rank_wait}</h1>
               </CardBody>
             </Card>
           </Col>
@@ -573,7 +638,7 @@ class StateDetail extends Component {
             <Card className="text-white bg-warning">
               <CardBody className="pb-0">
                 <div style={{textAlign: "center"}}>Standing amongst other states</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>12</h1>
+                <h1 style={{textAlign: "center", fontSize: 50}}>{this.state.rank_vrr}</h1>
               </CardBody>
             </Card>
           </Col>
@@ -582,11 +647,61 @@ class StateDetail extends Component {
             <Card className="text-white bg-danger">
               <CardBody className="pb-0">
                 <div style={{textAlign: "center"}}>Standing amongst other states</div>
-                <h1 style={{textAlign: "center", fontSize: 80}}>3</h1>
+                <h1 style={{textAlign: "center", fontSize: 50}}>{this.state.rank_turnout}</h1>
               </CardBody>
             </Card>
           </Col>
         </Row>
+        <hr/>
+        <CardColumns className="cols-2">
+          <Card style={{ height: "100%", width: "100%" }}>
+              <CardHeader>
+                <b>% Non-Voters due to disability related problems</b>
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  {/* <Bar data={this.state.bar} options={options} /> */}
+                  <DLine state_value={this.state.state_value}/>
+                </div>
+              </CardBody>
+          </Card>
+          <Card style={{ height: "100%", width: "100%" }}>
+              <CardHeader>
+                <b>Voting Wait Time</b>
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  {/* <Bar data={this.state.bar} options={options} /> */}
+                  <SLine state_value={this.state.state_value}/>
+                </div>
+              </CardBody>
+            </Card>
+        </CardColumns>
+        <hr/>
+        <CardColumns className="cols-2">
+            <Card style={{ height: "100%", width: "100%" }}>
+              <CardHeader>
+                <b>Voter Registration Rate</b>
+            </CardHeader>
+            <CardBody>
+              <div className="chart-wrapper">
+                {/* <Bar data={this.state.bar} options={options} /> */}
+                <OnlineRegistration state_value={this.state.state_value}/>
+              </div>
+            </CardBody>
+          </Card>   
+          <Card style={{ height: "100%", width: "100%" }}>
+              <CardHeader>
+                <b>% Voter turnout</b>
+              </CardHeader>
+              <CardBody>
+                <div className="chart-wrapper">
+                  {/* <Bar data={this.state.bar} options={options} /> */}
+                  <ColumnChart state_value={this.state.state_value}/>
+                </div>
+              </CardBody>
+            </Card>
+        </CardColumns>
       </div>
     );
   }
