@@ -58,4 +58,9 @@ router.get(
   modelMain.getTotalStateWithOnlineRegistration
 );
 
+/*
+ * Get information for each state
+ */
+router.get("/info/state/:state", modelMain.getStateInfo);
+
 module.exports = router;
