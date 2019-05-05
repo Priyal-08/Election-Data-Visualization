@@ -277,7 +277,7 @@ class Charts extends Component {
           <Widget02
             icon="icon-pie-chart"
             color="primary"
-            header="50"
+            header="51"
             mainText="Total States"
           />
           <Widget02

@@ -1,6 +1,5 @@
 import React from "react";
 import { ButtonToolbar, ButtonGroup, Button, Row, Col } from "reactstrap";
-// import ReactDOM from "react-dom";
 import Chart from "react-google-charts";
 import axios from "axios";
 
