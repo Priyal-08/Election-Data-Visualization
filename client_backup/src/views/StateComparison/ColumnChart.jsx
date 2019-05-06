@@ -2,6 +2,7 @@ import React from "react";
 import { ButtonToolbar, ButtonGroup, Button, Row, Col } from "reactstrap";
 import Chart from "react-google-charts";
 import axios from "axios";
+import { Cards } from "../Base";
 
 class ColumnChart extends React.Component {
   constructor() {
@@ -391,18 +392,36 @@ class ColumnChart extends React.Component {
     return (
       <div style={{ backgroundColor: "white" }}>
         <Row>
-          <Col lg="1" />
-          <Col lg="3" style={{ paddingLeft: 50, backgroundColor: "#F0F0F0" }}>
+          {/* <Col lg="1" /> */}
+
+          <Col
+            lg="3"
+            style={{
+              // paddingLeft: 70,
+              // paddingTop: 20,
+              backgroundColor: "#FFFF"
+            }}
+          >
+            <Row className="col align-text-bottom">
+              <h3 className="p-3">Years</h3>
+            </Row>
             <Row>
               <ButtonToolbar
                 className="float-right"
                 aria-label="Toolbar with button groups"
               >
-                <ButtonGroup className="mr-3" aria-label="First group">
+                <ButtonGroup
+                  style={{
+                    paddingLeft: 20,
+                    // paddingTop: 20,
+                    backgroundColor: "#FFF"
+                  }}
+                >
                   {this.state.years.map(year => {
                     return (
                       <Button
-                        color="outline-secondary"
+                        color="primary"
+                        // color="outline-secondary"
                         onClick={() => this.updateYear(year)}
                         active={
                           parseInt(this.state.selectedYear) === parseInt(year)
@@ -416,17 +435,25 @@ class ColumnChart extends React.Component {
               </ButtonToolbar>
             </Row>
             &nbsp;&nbsp;&nbsp;
-            <Row>
-              <span>Indicators</span>
+            <Row className="col">
+              <h3 className="p-3">Indicators</h3>
             </Row>
-            &nbsp;&nbsp;&nbsp;
+            {/* &nbsp;&nbsp;&nbsp; */}
             {this.state.indicators.map(indicator => {
               return (
-                <div>
-                  <Row>
+                <div className="col col-centered ">
+                  <ButtonGroup
+                    style={{
+                      width: "220px",
+                      borderRadius: 0,
+                      paddingTop: "10px"
+                    }}
+                  >
                     <Button
-                      className="btn-lg"
-                      // size="lg"
+                      style={{
+                        width: "220px",
+                        borderRadius: 0
+                      }}
                       color="primary"
                       onClick={() => this.onCheckboxBtnClick(indicator.idx)}
                       active={this.state.selectedOptions.includes(
@@ -435,23 +462,31 @@ class ColumnChart extends React.Component {
                     >
                       {indicator.value}
                     </Button>
-                  </Row>
-                  &nbsp;&nbsp;&nbsp;
+                  </ButtonGroup>
+                  {/* &nbsp;&nbsp;&nbsp; */}
                 </div>
               );
             })}
           </Col>
-          <Col lg="8">
+
+          <Col
+            lg="8"
+            style={{
+              marginLeft: 20,
+              // paddingTop: 10,
+              backgroundColor: "#FFFF"
+            }}
+          >
             <Chart
               chartType="BarChart"
               data={this.state.result}
-              width={1000}
+              width={900}
               height={800}
               options={{
                 annotations: {
                   stemColor: "none"
                 },
-                chartArea: { width: "85%", height: "95%" },
+                chartArea: { width: "65%", height: "95%" },
                 vAxis: {
                   gridlines: {
                     color: "transparent"
