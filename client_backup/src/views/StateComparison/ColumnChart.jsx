@@ -390,36 +390,73 @@ class ColumnChart extends React.Component {
   }
   render() {
     return (
-      <div style={{ backgroundColor: "white" }}>
-        <Row>
+      <div>
+        <Row
+          style={{
+            backgroundColor: "white",
+            boxShadow: "5px",
+            borderRadius: "5px",
+            padding: "10px",
+            width: "93%",
+            marginBottom: "10px",
+            marginLeft: "10px",
+            marginRight: "100px"
+            // marginLeft: "10px"
+          }}
+        >
+          Information
+        </Row>
+        <Row
+          style={{
+            marginLeft: "10px"
+            // paddingRight: "10px"
+            // backgroundColor: "#FFFF"
+          }}
+        >
           {/* <Col lg="1" /> */}
 
           <Col
             lg="3"
             style={{
-              // paddingLeft: 70,
-              // paddingTop: 20,
+              // marginLeft: "30px",
+              // marginTop: "40px",
               backgroundColor: "#FFFF"
             }}
           >
             <Row className="col align-text-bottom">
-              <h3 className="p-3">Years</h3>
+              <h3
+                // className="p-3"
+                style={{
+                  paddingLeft: "25px",
+                  paddingTop: "20px",
+                  backgroundColor: "#FFF"
+                }}
+              >
+                Years
+              </h3>
             </Row>
-            <Row>
+            <Row
+              style={{
+                paddingLeft: "30px",
+                paddingTop: "10px",
+                backgroundColor: "#FFF"
+              }}
+            >
               <ButtonToolbar
                 className="float-right"
                 aria-label="Toolbar with button groups"
               >
-                <ButtonGroup
-                  style={{
-                    paddingLeft: 20,
-                    // paddingTop: 20,
-                    backgroundColor: "#FFF"
-                  }}
-                >
+                <ButtonGroup>
                   {this.state.years.map(year => {
                     return (
                       <Button
+                        style={{
+                          paddingLeft: "8px",
+                          paddingRight: "8px",
+                          paddingBottom: "6px",
+                          paddingTop: "6px",
+                          fontSize: 13
+                        }}
                         color="primary"
                         // color="outline-secondary"
                         onClick={() => this.updateYear(year)}
@@ -436,9 +473,17 @@ class ColumnChart extends React.Component {
             </Row>
             &nbsp;&nbsp;&nbsp;
             <Row className="col">
-              <h3 className="p-3">Indicators</h3>
+              <h3
+                // className="p-3"
+                style={{
+                  paddingLeft: "25px",
+                  // paddingTop: 20,
+                  backgroundColor: "#FFF"
+                }}
+              >
+                Indicators
+              </h3>
             </Row>
-            {/* &nbsp;&nbsp;&nbsp; */}
             {this.state.indicators.map(indicator => {
               return (
                 <div className="col col-centered ">
@@ -446,6 +491,7 @@ class ColumnChart extends React.Component {
                     style={{
                       width: "220px",
                       borderRadius: 0,
+                      paddingLeft: "0px",
                       paddingTop: "10px"
                     }}
                   >
@@ -472,15 +518,15 @@ class ColumnChart extends React.Component {
           <Col
             lg="8"
             style={{
-              marginLeft: 20,
-              // paddingTop: 10,
+              marginLeft: "10px",
+              // marginTop: "40px",
               backgroundColor: "#FFFF"
             }}
           >
             <Chart
               chartType="BarChart"
               data={this.state.result}
-              width={900}
+              width={"100%"}
               height={800}
               options={{
                 annotations: {
