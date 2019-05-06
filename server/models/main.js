@@ -481,8 +481,21 @@ function insert_data(electionCsv) {
 
 module.exports.getStateInfo = function(req, res) {
   let state = req.params.state;
-  const years = [2008, 2010, 2012, 2014, 2016];
-  myMap = {};
-  myMap['CA'] = "California is a state in the Pacific Region of the United States. With 39.6 million residents, California is the most populous U.S. state and the third-largest by area. The state capital is Sacramento. The Greater Los Angeles Area and the San Francisco Bay Area are the nation's second- and fifth-most populous urban regions, with 18.7 million and 9.7 million residents respectively.[12] Los Angeles is California's most populous city, and the country's second-most populous, after New York City. California also has the nation's most populous county, Los Angeles County, and its largest county by area, San Bernardino County. The City and County of San Francisco is both the country's second-most densely populated major city after New York City and the fifth-most densely populated county, behind only four of the five New York City boroughs.";
-  res.json(myMap);
+  const fs = require('fs'); 
+  const csv = require('csv-parser');
+  var resMap = {};
+  var path = "./models/state-info.csv";
+  fs.createReadStream(path)
+  .pipe(csv())
+  .on('data', function(data){
+      if (data['abbr'] == state){
+        resMap["State"] = data['state'];
+        resMap["Abbr"] = data['abbr'];
+        resMap["Info"] = data['info'];
+        console.log(resMap);
+        res.json(resMap);
+      }
+    })
+  .on('end',function(){
+  }); 
 };
