@@ -399,33 +399,48 @@ class ColumnChart extends React.Component {
             padding: "10px",
             width: "93%",
             marginBottom: "10px",
-            marginLeft: "10px",
+            marginLeft: "40px",
             marginRight: "100px"
-            // marginLeft: "10px"
           }}
         >
-          Information
+          <div>
+            <h3 className="p-2">EPI RANK</h3>
+            <hr />
+            <div
+              // className="p-3"
+              style={{
+                textAlign: "justify",
+                padding: "20px",
+                paddingTop: "10px",
+                fontSize: "16px"
+              }}
+            >
+              How did each state perform in the last national election? What
+              about the last five elections? This page ranks all 50 states and
+              DC according to their scores in the 9 objective indicators used by
+              the EPI, which measure how well elections are being administered
+              around the country. Select individual election years at the top of
+              the graph for a closer look at each state's performance that year,
+              or compare across election years to see how states' index scores
+              have shifted over time. Compare states according to their
+              performance on one indicator, a few, or all of them.
+            </div>
+          </div>
         </Row>
         <Row
           style={{
             marginLeft: "10px"
-            // paddingRight: "10px"
-            // backgroundColor: "#FFFF"
           }}
         >
-          {/* <Col lg="1" /> */}
-
           <Col
             lg="3"
             style={{
-              // marginLeft: "30px",
-              // marginTop: "40px",
+              marginLeft: "30px",
               backgroundColor: "#FFFF"
             }}
           >
             <Row className="col align-text-bottom">
               <h3
-                // className="p-3"
                 style={{
                   paddingLeft: "25px",
                   paddingTop: "20px",
@@ -450,6 +465,7 @@ class ColumnChart extends React.Component {
                   {this.state.years.map(year => {
                     return (
                       <Button
+                        outline
                         style={{
                           paddingLeft: "8px",
                           paddingRight: "8px",
@@ -457,8 +473,7 @@ class ColumnChart extends React.Component {
                           paddingTop: "6px",
                           fontSize: 13
                         }}
-                        color="primary"
-                        // color="outline-secondary"
+                        color="success"
                         onClick={() => this.updateYear(year)}
                         active={
                           parseInt(this.state.selectedYear) === parseInt(year)
@@ -496,11 +511,14 @@ class ColumnChart extends React.Component {
                     }}
                   >
                     <Button
+                      outline
+                      color="success"
                       style={{
                         width: "220px",
                         borderRadius: 0
                       }}
-                      color="primary"
+                      // color="primary"
+
                       onClick={() => this.onCheckboxBtnClick(indicator.idx)}
                       active={this.state.selectedOptions.includes(
                         indicator.idx
