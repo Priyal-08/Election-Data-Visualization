@@ -242,10 +242,10 @@ class StateDetail extends Component {
               className="white"
               style={{ textAlign: "center", height: 300 }}
             >
-              <CardBody className="pb-0">
+              <CardBody className="pb-0" style={{overflowY:"scroll"}}>
                 <h1 style={{ fontWeight: "bold" }}>{this.state.state_name}</h1>
                 <hr />
-                <span>{this.state.state_description}</span>
+                <span style={{ fontWeight: '100' }}>{this.state.state_description}</span>
               </CardBody>
             </Card>
           </Col>
