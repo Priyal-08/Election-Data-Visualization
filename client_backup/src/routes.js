@@ -6,7 +6,7 @@ const StateComparison = React.lazy(() => import("./views/StateComparison"));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
-  { path: "/charts", name: "Charts", component: Charts },
+  { path: "/charts", name: "Dashboard", component: Charts },
   { path: "/stateDetail", name: "StateDetail", component: StateDetail },
   {
     path: "/stateComparison",

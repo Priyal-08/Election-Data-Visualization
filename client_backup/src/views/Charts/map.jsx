@@ -41,7 +41,7 @@ export default class Map extends React.Component {
   tempState = {};
   chartConfigs = {
     type: "usa",
-    // width: "700",
+    width: "100%",
     // height: "370",
     dataFormat: "json",
     dataSource: {
