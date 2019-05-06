@@ -24,6 +24,12 @@ class SLine extends React.Component {
     this.getChartData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.state_value !== this.props.state_value) {
+      this.getChartData();
+    }
+  }
+
   getChartData() {
     var result_1 = [];
     var result_2 = [];
@@ -31,14 +37,17 @@ class SLine extends React.Component {
     axios
       .get(url)
       .then(response => {
+        response.data.sort(function(a, b) {
+          return a.year.localeCompare(b.year);
+        });
         var data = response.data;
         var data = [];
-        data.push(["Years", "Wait time", "Registration Rejections"]);
+        data.push(["Years", "Wait time"]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
           row.push(response.data[i].year);
           row.push(response.data[i].wait * 0.9);
-          row.push(response.data[i].reg_rej * 100);
+          //row.push(response.data[i].reg_rej * 100);
           // row.push(1);
           data.push(row);
         }

@@ -23,11 +23,23 @@ export default class ColumnChart extends React.Component {
     };
   }
   componentDidMount() {
-    // console.log("inside column function");
+    this.getChartData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.state_value !== this.props.state_value) {
+      this.getChartData();
+    }
+  }
+
+  getChartData() {
     var url = "http://localhost:4000/elections/state/" + this.props.state_value;
     axios
       .get(url)
       .then(response => {
+        response.data.sort(function(a, b) {
+          return a.year.localeCompare(b.year);
+        });
         var data = [];
         data.push(["Years", "Turn-out", { role: "style" }]);
         for (var i = 0; i < response.data.length; ++i) {

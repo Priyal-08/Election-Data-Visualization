@@ -25,11 +25,20 @@ class DisabilityLineGraph extends React.Component {
     this.getChartData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.state_value !== this.props.state_value) {
+      this.getChartData();
+    }
+  }
+
   getChartData() {
     var url = "http://localhost:4000/elections/state/" + this.props.state_value;
     axios
       .get(url)
       .then(response => {
+        response.data.sort(function(a, b) {
+          return a.year.localeCompare(b.year);
+        });
         var data = response.data;
         var data = [];
         data.push(["Years", "% Non-Voters"]);
