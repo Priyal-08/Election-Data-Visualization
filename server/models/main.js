@@ -4,7 +4,7 @@ var csv = require("csv");
 module.exports.home = function(req, res) {
   election.find(function(err, result) {
     if (err) {
-      console.log(err);
+      // console.log(err);
     } else {
       res.json(result);
     }
@@ -51,7 +51,7 @@ const sleep = milliseconds => {
 };
 
 module.exports.getVoterTurnOut = function(req, res) {
-  console.log("Voter turnout");
+  // console.log("Voter turnout");
   const years = [2008, 2010, 2012, 2014, 2016];
   var myMap = [];
   years.forEach(y =>
@@ -72,7 +72,7 @@ module.exports.getVoterTurnOut = function(req, res) {
   sleep(1000).then(() => {
     res.json(myMap.sort());
   });
-  console.log(myMap);
+  // console.log(myMap);
 };
 
 function getMax(data, column) {
@@ -94,7 +94,7 @@ function getMin(data, column) {
 }
 
 module.exports.getVoterWaitTime = function(req, res) {
-  console.log("Voter Wait Time");
+  // console.log("Voter Wait Time");
   const years = [2008, 2010, 2012, 2014, 2016];
   var myMap = [];
   years.forEach(y =>
@@ -102,7 +102,7 @@ module.exports.getVoterWaitTime = function(req, res) {
       var count = electionresult.length;
       var sum = 0;
       var sumproblems = 0;
-      console.log("Year : " + y);
+      // console.log("Year : " + y);
       // var min = this.getMin(electionresult, "wait");
       // var max = this.getMax(electionresult, "wait");
       var column = "wait";
@@ -120,13 +120,13 @@ module.exports.getVoterWaitTime = function(req, res) {
           min = electionresult[i][column];
       }
 
-      console.log("Min max values");
+      // console.log("Min max values");
 
       for (var i = 0; i < electionresult.length; i++) {
         electionresult[i]["wait"] =
           (electionresult[i]["wait"] - min) / (max - min);
       }
-      console.log("Normalized");
+      // console.log("Normalized");
       for (var i = 0; i < count; i++) {
         sum += parseFloat(electionresult[i]["wait"]);
         if (isNaN(parseInt(electionresult[i]["reg_rej"]))) continue;
@@ -144,13 +144,13 @@ module.exports.getVoterWaitTime = function(req, res) {
     })
   );
   sleep(1000).then(() => {
-    console.log(myMap);
+    // console.log(myMap);
     res.json(myMap.sort());
   });
 };
 
 module.exports.getDisabilityRate = function(req, res) {
-  console.log("Disability");
+  // console.log("Disability");
   const years = [2008, 2010, 2012, 2014, 2016];
   var DisMap = [];
   years.forEach(y =>
@@ -173,11 +173,11 @@ module.exports.getDisabilityRate = function(req, res) {
   sleep(1000).then(() => {
     res.json(DisMap.sort());
   });
-  console.log(DisMap);
+  // console.log(DisMap);
 };
 
 module.exports.getDataCompleteness = function(req, res) {
-  console.log("Data Completeness");
+  // console.log("Data Completeness");
   const years = [2008, 2010, 2012, 2014, 2016];
   var DisMap = [];
   years.forEach(y =>
@@ -199,11 +199,11 @@ module.exports.getDataCompleteness = function(req, res) {
   sleep(1000).then(() => {
     res.json(DisMap.sort());
   });
-  console.log(DisMap);
+  // console.log(DisMap);
 };
 
 module.exports.getTotalStateWithOnlineRegistration = function(req, res) {
-  console.log("Data Completeness");
+  // console.log("Data Completeness");
   const years = [2008, 2010, 2012, 2014, 2016];
   var DisMap = [];
   years.forEach(y =>
@@ -224,7 +224,7 @@ module.exports.getTotalStateWithOnlineRegistration = function(req, res) {
   sleep(1000).then(() => {
     res.json(DisMap.sort());
   });
-  console.log(DisMap);
+  // console.log(DisMap);
 };
 
 module.exports.getStateKpiDataByYear = function(req, res) {
@@ -249,7 +249,7 @@ module.exports.getStateKpiDataByYear = function(req, res) {
       resMap["Disability"] = Disability.toFixed(2);
       resMap["Wait"] = parseFloat(electionresult[0]["wait"]).toFixed(2);
       resMap["Vrr"] = Vrr.toFixed(2);
-      console.log(resMap);
+      // console.log(resMap);
       res.json(resMap);
     }
   );
@@ -333,12 +333,12 @@ module.exports.getStateKpiRankDataByYear = function(req, res) {
       var temp = new Map(
         [...Rmap].sort((a, b) => (a[1] === b[1] ? 0 : a[1] > b[1] ? 1 : -1))
       );
-      console.log(temp);
+      // console.log(temp);
       var arr = Array.from(temp.keys());
       resJson["Vrr"] = 51 - arr.indexOf(state);
     }
   );
-  console.log(resJson);
+  // console.log(resJson);
   res.json(resJson);
 };
 
@@ -395,7 +395,7 @@ function MyCSV(
 }
 
 module.exports.load_data = function(req, res) {
-  console.log("inside load data");
+  // console.log("inside load data");
   var path = "epi_indicators-all_years.csv";
   var obj = csv();
   var users = [];
@@ -429,20 +429,20 @@ module.exports.load_data = function(req, res) {
         data[i][23]
       );
       insert_data(electionCsv).then(response => {
-        console.log("inserted user");
+        // console.log("inserted user");
       });
       if (i == data.length - 1) {
-        console.log("Completed");
+        // console.log("Completed");
       }
     }
   });
 };
 
 function insert_data(electionCsv) {
-  console.log("inside insert data");
+  // console.log("inside insert data");
   return new Promise((resolve, reject) => {
     if (reject) {
-      console.log("ERROR");
+      // console.log("ERROR");
     }
     election.create(
       {
@@ -492,7 +492,7 @@ module.exports.getStateInfo = function(req, res) {
         resMap["State"] = data['state'];
         resMap["Abbr"] = data['abbr'];
         resMap["Info"] = data['info'];
-        console.log(resMap);
+        // console.log(resMap);
         res.json(resMap);
       }
     })
