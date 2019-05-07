@@ -287,8 +287,8 @@ class StateDetail extends Component {
                 <hr />
                 </CardBody>
                
-                <CardBody className="pb-0" style={{overflowY:"scroll", textAlign: 'justify', paddingLeft: 30, paddingRight: 30}}>
-                <span style={{ fontWeight: '100', textAlign: 'right', fontFamily: 'BlinkMacSystemFont', fontSize: '16px', }}>{this.state.state_description}</span>
+                <CardBody className="pb-0" style={{overflowY:"scroll", textAlign: 'justify', paddingLeft: 30, paddingRight: 30, marginBottom: 30, paddingTop: 0}}>
+                <span style={{ fontWeight: '100', textAlign: 'right', fontFamily: 'BlinkMacSystemFont', fontSize: '16px', paddingBottom: 30}}>{this.state.state_description}</span>
               </CardBody>
             </Card>
           </Col>
@@ -397,6 +397,7 @@ class StateDetail extends Component {
           </Col>
         </Row>
         <hr />
+        <h1 style={{textAlign: "center"}}>{this.state.state_name}</h1>
         <CardColumns className="cols-2">
           <Card style={{ height: "100%", width: "100%" }}>
             <CardHeader>
