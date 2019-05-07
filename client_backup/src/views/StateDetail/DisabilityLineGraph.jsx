@@ -16,6 +16,9 @@ class DisabilityLineGraph extends React.Component {
           color: "black",
           fontSize: 15
         },
+        hAxis: {baseline:0,gridlines: {
+          color: "transparent"
+        }},
         fontSize: 12
       }
     };

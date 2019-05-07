@@ -15,7 +15,9 @@ export default class OnlineRegistration extends React.Component {
           fontSize: 15
         },
         // hAxis: { title: "Year", minValue: 0, maxValue: 15 },
-        // vAxis: { title: "% of voters turn-out", minValue: 0, maxValue: 15 },
+        vAxis: { baseline: 0,gridlines: {
+          color: "transparent"
+        }},
         legend: {
           position: "none"
         },

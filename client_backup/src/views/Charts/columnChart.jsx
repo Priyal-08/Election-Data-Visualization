@@ -14,6 +14,7 @@ export default class ColumnChart extends React.Component {
           color: "black",
           fontSize: 15
         },
+        vAxis: {baseline: 0},
         pointSize: 5,
         legend: { position: "none" },
         // hAxis: { title: "Year" },
@@ -28,12 +29,11 @@ export default class ColumnChart extends React.Component {
       .get("http://localhost:4000/elections/voterturnout/1")
       .then(response => {
         var data = [];
-        data.push(["Years", "Turn-out", { role: "style" }]);
+        data.push(["Years", "Turn-out",]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
           row.push(response.data[i][0].toString());
           row.push(response.data[i][1]);
-          row.push("color: rgb(51, 102, 204)");
           data.push(row);
         }
         console.log(data);

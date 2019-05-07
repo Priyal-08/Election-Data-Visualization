@@ -278,41 +278,41 @@ class Charts extends Component {
             icon="icon-pie-chart"
             color="primary"
             header="51"
-            mainText="Total States"
+            mainText="States"
           />
           <Widget02
             icon="icon-pie-chart"
             color="primary"
-            header="4"
-            mainText="Total Years analyzed"
+            header="5"
+            mainText="Years analyzed"
           />
-          <Widget02
-            icon="icon-pie-chart"
-            color="primary"
-            header="4"
-            mainText="Total data sources"
-          />
-        </CardColumns>
-        <CardColumns className="mb-3">
-          <Widget02
+           <Widget02
             icon="icon-pie-chart"
             color="primary"
             header="6"
-            mainText="Key primary indicators"
-          />
-          <Widget02
-            icon="icon-pie-chart"
-            color="primary"
-            header="256"
-            mainText="Total rows of data"
-          />
-          <Widget02
-            icon="icon-pie-chart"
-            color="primary"
-            header="4"
-            mainText="Total elections analyzed"
+            mainText="Key Performance Indicators"
           />
         </CardColumns>
+        {/* <CardColumns className="mb-3">
+          <Widget02
+            icon="icon-pie-chart"
+            color="primary"
+            header="1"
+            mainText="Data source"
+          />
+          <Widget02
+            icon="icon-pie-chart"
+            color="primary"
+            header="4352"
+            mainText="Data Points"
+          />
+          <Widget02
+            icon="icon-pie-chart"
+            color="primary"
+            header="5"
+            mainText="Elections analyzed"
+          />
+        </CardColumns> */}
       </div>
     );
   }

@@ -19,7 +19,12 @@ export default class OnlineRegistration extends React.Component {
         legend: {
           position: "none"
         },
-        fontSize: 12
+        fontSize: 12,
+        vAxis:{
+          gridlines: {
+            color: "transparent"
+          }
+        }
       }
     };
   }

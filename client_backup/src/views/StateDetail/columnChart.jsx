@@ -15,6 +15,7 @@ export default class ColumnChart extends React.Component {
           fontSize: 15
         },
         pointSize: 5,
+        vAxis: {baseline: 0},
         legend: { position: "none" },
         // hAxis: { title: "Year" },
         // vAxis: { title: "% of voters turn-out" },

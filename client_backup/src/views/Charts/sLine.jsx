@@ -32,12 +32,13 @@ class SLine extends React.Component {
       .then(response => {
         var data = response.data;
         var data = [];
-        data.push(["Years", "Wait time", "Registration rejections"]);
+        data.push(["Years", "Wait time", "Registration rejections",  { role: "style" }]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
           row.push(response.data[i][0].toString());
           row.push(response.data[i][1] * 0.9);
           row.push(response.data[i][2] * 10);
+          row.push("color: #20a8d8");
           // row.push(1);
           data.push(row);
         }

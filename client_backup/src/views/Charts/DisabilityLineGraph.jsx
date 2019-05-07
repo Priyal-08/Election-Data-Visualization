@@ -16,7 +16,10 @@ class DisabilityLineGraph extends React.Component {
           color: "black",
           fontSize: 15
         },
-        fontSize: 12
+        fontSize: 12,
+        hAxis: {baseline: 0,gridlines: {
+          color: "transparent"
+        }},
       }
     };
   }
@@ -31,12 +34,11 @@ class DisabilityLineGraph extends React.Component {
       .then(response => {
         var data = response.data;
         var data = [];
-        data.push(["Years", "% Non-Voters"]);
+        data.push(["Years", "% Non-Voters",]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
           row.push(response.data[i][0].toString());
           row.push(response.data[i][1]);
-          // row.push("color:#63c2de");
           data.push(row);
         }
         console.log(data);

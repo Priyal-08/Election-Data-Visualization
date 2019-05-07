@@ -8,13 +8,17 @@ class SLine extends React.Component {
     this.state = {
       result: [],
       options: {
+        vAxis: { minValue: 0 },
         // title: "Wait time",
         pointSize: 5,
-        legend: "none",
+        legend: {
+          position: "none"
+        },
         titleTextStyle: {
           color: "black",
           fontSize: 15
         },
+        
         fontSize: 12
       }
     };

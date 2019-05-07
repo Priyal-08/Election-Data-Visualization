@@ -17,7 +17,7 @@ class DataCompleteness extends React.Component {
         },
         pointSize: 7,
         curveType: "function",
-        fontSize: 12
+        fontSize: 12,
       }
     };
   }
@@ -32,7 +32,7 @@ class DataCompleteness extends React.Component {
       .then(response => {
         var data = response.data;
         var data = [];
-        data.push(["Years", "% Data Completeness"]);
+        data.push(["Years", "% Data Completeness",]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
           row.push(response.data[i][0].toString());
