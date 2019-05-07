@@ -47,33 +47,30 @@ export default class Map extends React.Component {
     dataSource: {
       // Map Configuration
       chart: {
-        caption: "Availibility of online registration in year 2016",
         showToolTip: "1",
         //subcaption: " 2016",
         numbersuffix: "",
-        includevalueinlabels: "1",
+        // includevalueinlabels: "0",
         labelsepchar: ": ",
         entityFillHoverColor: "#FFF9C4",
+        entityFillColor: "#64d9db",
         theme: "fusion"
       },
       // Aesthetics; ranges synced with the slider
-      colorrange: {
-        minvalue: "0",
-        code: "#088ab2",
-        gradient: "1",
-        color: [
-          {
-            minvalue: "0",
-            maxvalue: "0.5",
-            color: "#32c2ef"
-          },
-          {
-            minvalue: "0.5",
-            maxvalue: "1",
-            color: "#64d9db"
-          }
-        ]
-      },
+      // colorrange: {
+      //   minvalue: "0",
+      //   // code: "#088ab2",
+      //   code: "#64d9db",
+      //   gradient: "110",
+      //   color: [
+      //     {
+      //       minvalue: "0",
+      //       maxvalue: "1",
+      //       // color: "#32c2ef"
+      //       color: "#64d9db"
+      //     }
+      //   ]
+      // },
       // Source data as JSON --> id represents countries of world.
       data: []
     }
@@ -81,11 +78,20 @@ export default class Map extends React.Component {
   temp = [];
   loadData = () => {
     for (var i = 0, l = this.state.result.length; i < l; i++) {
-      this.temp.push({
-        id: this.state.result[i].state_abbv,
-        value: this.state.result[i].online_reg,
-        showLabel: 0
-      });
+      if(!this.state.result[i].online_reg){
+        this.temp.push({
+          id: this.state.result[i].state_abbv,
+          value: 0,
+          showLabel: 0
+        });
+      }
+      else{
+        this.temp.push({
+          id: this.state.result[i].state_abbv,
+          value: this.state.result[i].online_reg,
+          showLabel: 0,
+        });
+      }
     }
   };
 

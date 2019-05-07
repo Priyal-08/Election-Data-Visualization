@@ -196,6 +196,14 @@ class StateDetail extends Component {
               }}
             >
               <Button
+                outline
+                style={{
+                  paddingLeft: "8px",
+                  paddingRight: "8px",
+                  paddingBottom: "6px",
+                  paddingTop: "6px",
+                  fontSize: 13
+                }}
                 color="primary"
                 onClick={() => this.onRadioBtnClick(2016)}
                 active={this.state.year === 2016}
@@ -203,6 +211,14 @@ class StateDetail extends Component {
                 2016
               </Button>
               <Button
+                outline
+                style={{
+                  paddingLeft: "8px",
+                  paddingRight: "8px",
+                  paddingBottom: "6px",
+                  paddingTop: "6px",
+                  fontSize: 13
+                }}
                 color="primary"
                 onClick={() => this.onRadioBtnClick(2014)}
                 active={this.state.year === 2014}
@@ -210,6 +226,14 @@ class StateDetail extends Component {
                 2014
               </Button>
               <Button
+                outline
+                style={{
+                  paddingLeft: "8px",
+                  paddingRight: "8px",
+                  paddingBottom: "6px",
+                  paddingTop: "6px",
+                  fontSize: 13
+                }}
                 color="primary"
                 onClick={() => this.onRadioBtnClick(2012)}
                 active={this.state.year === 2012}
@@ -217,6 +241,14 @@ class StateDetail extends Component {
                 2012
               </Button>
               <Button
+                outline
+                style={{
+                  paddingLeft: "8px",
+                  paddingRight: "8px",
+                  paddingBottom: "6px",
+                  paddingTop: "6px",
+                  fontSize: 13
+                }}
                 color="primary"
                 onClick={() => this.onRadioBtnClick(2010)}
                 active={this.state.year === 2010}
@@ -224,6 +256,14 @@ class StateDetail extends Component {
                 2010
               </Button>
               <Button
+                outline
+                style={{
+                  paddingLeft: "8px",
+                  paddingRight: "8px",
+                  paddingBottom: "6px",
+                  paddingTop: "6px",
+                  fontSize: 13
+                }}
                 color="primary"
                 onClick={() => this.onRadioBtnClick(2008)}
                 active={this.state.year === 2008}
@@ -242,10 +282,13 @@ class StateDetail extends Component {
               className="white"
               style={{ textAlign: "center", height: 300 }}
             >
-              <CardBody className="pb-0" style={{overflowY:"scroll"}}>
-                <h1 style={{ fontWeight: "bold" }}>{this.state.state_name}</h1>
+              <CardBody className="pb-0" >
+                <h1 style={{ fontWeight: "bold", textAlign: 'center'}}>{this.state.state_name}</h1>
                 <hr />
-                <span style={{ fontWeight: '100' }}>{this.state.state_description}</span>
+                </CardBody>
+               
+                <CardBody className="pb-0" style={{overflowY:"scroll", textAlign: 'justify', paddingLeft: 30, paddingRight: 30}}>
+                <span style={{ fontWeight: '100', textAlign: 'right', fontFamily: 'BlinkMacSystemFont', fontSize: '16px', }}>{this.state.state_description}</span>
               </CardBody>
             </Card>
           </Col>
@@ -253,8 +296,8 @@ class StateDetail extends Component {
         <br />
         <Row>
           <Col xs="12" sm="12" lg="3">
-            <h2>Disability</h2>
-            <Card className="text-white bg-info">
+            <h3 style={{textAlign:"center"}}>Disability</h3>
+            <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div>Percentage of disabled voters</div>
                 <h1 style={{ textAlign: "center", fontSize: 50 }}>
@@ -265,7 +308,7 @@ class StateDetail extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-            <h2>Voting Wait Time</h2>
+          <h3 style={{textAlign:"center"}}>Voting Wait Time</h3>
             <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div>Percentage of voter wait time</div>
@@ -277,8 +320,8 @@ class StateDetail extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-            <h2>Registration Rate</h2>
-            <Card className="text-white bg-warning">
+          <h3 style={{textAlign:"center"}}>Registration Rate</h3>
+            <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div>Percentage of Registration Rate</div>
                 <h1 style={{ textAlign: "center", fontSize: 50 }}>
@@ -289,8 +332,8 @@ class StateDetail extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-            <h2>Turnout</h2>
-            <Card className="text-white bg-danger">
+          <h3 style={{textAlign:"center"}}>Turnout</h3>
+            <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div>Percentage of Voter Turnout</div>
                 <h1 style={{ textAlign: "center", fontSize: 50 }}>
@@ -302,7 +345,7 @@ class StateDetail extends Component {
         </Row>
         <Row>
           <Col xs="12" sm="6" lg="3">
-            <Card className="text-white bg-info">
+            <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div style={{ textAlign: "center" }}>
                   Standing amongst other states
@@ -328,7 +371,7 @@ class StateDetail extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-            <Card className="text-white bg-warning">
+            <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div style={{ textAlign: "center" }}>
                   Standing amongst other states
@@ -341,7 +384,7 @@ class StateDetail extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-            <Card className="text-white bg-danger">
+            <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div style={{ textAlign: "center" }}>
                   Standing amongst other states

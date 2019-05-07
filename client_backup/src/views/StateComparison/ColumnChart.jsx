@@ -473,7 +473,7 @@ class ColumnChart extends React.Component {
                           paddingTop: "6px",
                           fontSize: 13
                         }}
-                        color="success"
+                        color="primary"
                         onClick={() => this.updateYear(year)}
                         active={
                           parseInt(this.state.selectedYear) === parseInt(year)
@@ -512,7 +512,7 @@ class ColumnChart extends React.Component {
                   >
                     <Button
                       outline
-                      color="success"
+                      color="primary"
                       style={{
                         width: "220px",
                         borderRadius: 0
