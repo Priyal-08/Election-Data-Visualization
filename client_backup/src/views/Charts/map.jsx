@@ -51,7 +51,7 @@ export default class Map extends React.Component {
         //subcaption: " 2016",
         numbersuffix: "",
         // includevalueinlabels: "0",
-        labelsepchar: ": ",
+        labelsepchar: "",
         entityFillHoverColor: "#FFF9C4",
         entityFillColor: "#64d9db",
         theme: "fusion"
@@ -81,14 +81,14 @@ export default class Map extends React.Component {
       if(!this.state.result[i].online_reg){
         this.temp.push({
           id: this.state.result[i].state_abbv,
-          value: 0,
+          color: "#64d9db",
           showLabel: 0
         });
       }
       else{
         this.temp.push({
           id: this.state.result[i].state_abbv,
-          value: this.state.result[i].online_reg,
+          color: "#64d9db",
           showLabel: 0,
         });
       }
