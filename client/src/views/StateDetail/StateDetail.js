@@ -35,16 +35,16 @@ class StateDetail extends Component {
     this.state = {
       dropdownOpen: false,
       year: 2016,
-      kpi_turnout: "51.59",
-      kpi_disability: "11.84",
-      kpi_wait: "10.98",
-      kpi_vrr: "80.35",
-      rank_turnout: "48",
-      rank_disability: "14",
-      rank_wait: "36",
-      rank_vrr: "44",
-      state_value: "TX",
-      state_name: "Texas",
+      kpi_turnout: "58.40",
+      kpi_disability: "11.56",
+      kpi_wait: "6.61",
+      kpi_vrr: "79.77",
+      rank_turnout: "37",
+      rank_disability: "13",
+      rank_wait: "24",
+      rank_vrr: "43",
+      state_value: "CA",
+      state_name: "California",
       state_description: ""
     };
     this.childHandler = this.childHandler.bind(this);
@@ -52,6 +52,7 @@ class StateDetail extends Component {
 
   componentDidMount() {
     this.getStateDescription();
+    this.getStateDetails();
   }
 
   childHandler(dataFromChild) {
@@ -63,7 +64,7 @@ class StateDetail extends Component {
 
   onRadioBtnClick(year) {
     //Turnout, Disability, Wait, VRR
-    var year;
+    // var year;
     this.setState(
       {
         year: year
@@ -107,6 +108,10 @@ class StateDetail extends Component {
 
   getStateDetails() {
     try {
+      var turnout;
+      var disability;
+      var wait;
+      var vrr;
       var url =
         "http://localhost:4000/elections/kpi/state/" +
         this.state.state_value +
@@ -115,54 +120,36 @@ class StateDetail extends Component {
       fetch(url)
         .then(res => res.json())
         .then(json => {
-          var turnout = json.Turnout;
-          var disability = json.Disability;
-          var wait = json.Wait;
-          var vrr = json.Vrr;
+          turnout = json.Turnout;
+          disability = json.Disability;
+          wait = json.Wait;
+          vrr = json.Vrr;
 
-          this.setState({
-            kpi_turnout: turnout,
-            kpi_disability: disability,
-            kpi_wait: wait == "NaN" ? "NA" : wait,
-            kpi_vrr: vrr
-          });
-        });
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-      var url =
-        "http://localhost:4000/elections/kpi/rank/state/" +
-        this.state.state_value +
-        "/year/" +
-        this.state.year;
-      console.log(url);
-      fetch(url)
-        .then(res => res.json())
-        .then(json => {
-          console.log(json.message);
-          var turnout_rank = json.Turnout;
-          var disability_rank = json.Disability;
-          var wait_rank = json.Wait;
-          var vrr_rank = json.Vrr;
-          // console.log(typeof data);
-          // data = JSON.parse(data);
-          console.log(
-            "Turnout: " +
-              turnout_rank +
-              "Disability: " +
-              disability_rank +
-              "Wait: " +
-              wait_rank +
-              "VRR: " +
-              vrr_rank
-          );
-          this.setState({
-            rank_turnout: turnout_rank,
-            rank_disability: disability_rank,
-            rank_wait: wait_rank,
-            rank_vrr: vrr_rank
-          });
+          var url2 =
+            "http://localhost:4000/elections/kpi/rank/state/" +
+            this.state.state_value +
+            "/year/" +
+            this.state.year;
+
+          fetch(url2)
+            .then(res => res.json())
+            .then(json => {
+              var turnout_rank = json.Turnout;
+              var disability_rank = json.Disability;
+              var wait_rank = json.Wait;
+              var vrr_rank = json.Vrr;
+
+              this.setState({
+                rank_turnout: turnout_rank,
+                rank_disability: disability_rank,
+                rank_wait: wait_rank,
+                rank_vrr: vrr_rank,
+                kpi_turnout: turnout,
+                kpi_disability: disability,
+                kpi_wait: wait == "NaN" ? "NA" : wait,
+                kpi_vrr: vrr
+              });
+            });
         });
     } catch (error) {
       console.log(error);
@@ -282,13 +269,35 @@ class StateDetail extends Component {
               className="white"
               style={{ textAlign: "center", height: 300 }}
             >
-              <CardBody className="pb-0" >
-                <h1 style={{ fontWeight: "bold", textAlign: 'center'}}>{this.state.state_name}</h1>
+              <CardBody className="pb-0">
+                <h1 style={{ fontWeight: "bold", textAlign: "center" }}>
+                  {this.state.state_name}
+                </h1>
                 <hr />
-                </CardBody>
-               
-                <CardBody className="pb-0" style={{overflowY:"scroll", textAlign: 'justify', paddingLeft: 30, paddingRight: 30, marginBottom: 30, paddingTop: 0}}>
-                <span style={{ fontWeight: '100', textAlign: 'right', fontFamily: 'BlinkMacSystemFont', fontSize: '16px', paddingBottom: 30}}>{this.state.state_description}</span>
+              </CardBody>
+
+              <CardBody
+                className="pb-0"
+                style={{
+                  overflowY: "scroll",
+                  textAlign: "justify",
+                  paddingLeft: 30,
+                  paddingRight: 30,
+                  marginBottom: 30,
+                  paddingTop: 0
+                }}
+              >
+                <span
+                  style={{
+                    fontWeight: "100",
+                    textAlign: "right",
+                    fontFamily: "BlinkMacSystemFont",
+                    fontSize: "16px",
+                    paddingBottom: 30
+                  }}
+                >
+                  {this.state.state_description}
+                </span>
               </CardBody>
             </Card>
           </Col>
@@ -296,7 +305,7 @@ class StateDetail extends Component {
         <br />
         <Row>
           <Col xs="12" sm="12" lg="3">
-            <h3 style={{textAlign:"center"}}>Disability</h3>
+            <h3 style={{ textAlign: "center" }}>Disability</h3>
             <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div>Percentage of disabled voters</div>
@@ -308,7 +317,7 @@ class StateDetail extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-          <h3 style={{textAlign:"center"}}>Voting Wait Time</h3>
+            <h3 style={{ textAlign: "center" }}>Voting Wait Time</h3>
             <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div>Percentage of voter wait time</div>
@@ -320,7 +329,7 @@ class StateDetail extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-          <h3 style={{textAlign:"center"}}>Registration Rate</h3>
+            <h3 style={{ textAlign: "center" }}>Registration Rate</h3>
             <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div>Percentage of Registration Rate</div>
@@ -332,7 +341,7 @@ class StateDetail extends Component {
           </Col>
 
           <Col xs="12" sm="6" lg="3">
-          <h3 style={{textAlign:"center"}}>Turnout</h3>
+            <h3 style={{ textAlign: "center" }}>Turnout</h3>
             <Card className="text-white bg-primary">
               <CardBody className="pb-0">
                 <div>Percentage of Voter Turnout</div>
@@ -397,7 +406,7 @@ class StateDetail extends Component {
           </Col>
         </Row>
         <hr />
-        <h1 style={{textAlign: "center"}}>{this.state.state_name}</h1>
+        <h1 style={{ textAlign: "center" }}>{this.state.state_name}</h1>
         <CardColumns className="cols-2">
           <Card style={{ height: "100%", width: "100%" }}>
             <CardHeader>
