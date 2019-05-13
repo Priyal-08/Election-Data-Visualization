@@ -29,11 +29,17 @@ export default class ColumnChart extends React.Component {
       .get("http://localhost:4000/elections/voterturnout/1")
       .then(response => {
         var data = [];
-        data.push(["Years", "Turn-out",]);
+        data.push(["Years", "Turn-out", {role: "style"}]);
         for (var i = 0; i < response.data.length; ++i) {
           var row = [];
           row.push(response.data[i][0].toString());
           row.push(response.data[i][1]);
+          if(response.data[i][1]<50){
+            row.push("red");
+          }
+          else{
+            row.push("blue");
+          }
           data.push(row);
         }
         console.log(data);
