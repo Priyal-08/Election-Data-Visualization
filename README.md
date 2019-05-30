@@ -9,7 +9,7 @@ The election dashboard prompts following decision making:
  - State comparison- compare states, make decisions such as if a state is performing good, follow the strategies or methods adopted by the good performing state to improve the performance in the underperforming states.
  
 ### Tech stack
-Mongo DB | Express | React | Node JS | React-google charts | Fusion charts
+MongoDB | Express | React | Node JS | React-google charts | Fusion charts
 
 ## How to run
 1. Download the source code.
