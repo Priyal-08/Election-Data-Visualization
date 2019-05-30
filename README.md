@@ -25,7 +25,6 @@ The election dashboard prompts following decision making:
 
 2. State Level Views
 ![](./StateDetails.png)
-
 ![](./StateDetails2.png)
 
 3. States Comparison View
