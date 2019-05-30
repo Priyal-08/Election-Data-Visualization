@@ -7,6 +7,9 @@ The election dashboard prompts following decision making:
  - Data completeness- Helps to improve the ways/methods we can collect the data.
  - Voter Turnout - Steps to be taken to encourage people to exercise voting especially young people.
  - State comparison- compare states, make decisions such as if a state is performing good, follow the strategies or methods adopted by the good performing state to improve the performance in the underperforming states.
+ 
+### Tech stack
+Mongo DB | Express | React | Node JS | React-google charts | Fusion charts
 
 ## How to run
 1. Download the source code.
