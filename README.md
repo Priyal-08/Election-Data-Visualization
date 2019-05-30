@@ -18,4 +18,16 @@ The election dashboard prompts following decision making:
   - Go to client folder
   - Run npm install
   - Run npm start
+  
+## Dashboard screenshots:
+1. National Average View
+![](./NationalView.png)
+
+2. State Level Views
+![](./StateDetails.png)
+
+![](./StateDetails2.png)
+
+3. States Comparison View
+![](./StateComparison.png)
 
